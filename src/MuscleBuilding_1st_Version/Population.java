@@ -19,6 +19,12 @@ public class Population {
         this.population = new Individual[populationSize];
     }
 
+    /**
+     * A constructor to create a population of individuals
+     * based on the specified population size and length of individual's chromosomes
+     * @param populationSize
+     * @param chromosomeLength
+     */
     public Population(int populationSize, int chromosomeLength) {
         this.population = new Individual[populationSize];
 
