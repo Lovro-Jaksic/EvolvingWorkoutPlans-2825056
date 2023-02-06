@@ -5,12 +5,14 @@ public class GeneticAlgorithm {
     private double mutationRate;
     private double crossoverRate;
     private int elitismCount;
+    protected int tournamentSize;
 
-    public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount) {
+    public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize) {
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
         this.elitismCount = elitismCount;
+        this.tournamentSize = tournamentSize;
     }
 
     public Population initPopulation(int chromosomeLength) {
@@ -18,6 +20,18 @@ public class GeneticAlgorithm {
         return population;
     }
 
+    /**
+     * Method used for calculating the fitness of the individual
+     *
+     * For now this will be based on the frequency of body parts trained in an
+     * exercise and the amount of sets and reps trained per exercise
+     *
+     * TODO: Calculate the fitness score based on how the workouts progress over the 4 weeks
+     * (sets and reps and later more difficult exercises)
+     *
+     * @param individual
+     * @return
+     */
     public double calcFitness(Individual individual) {
         int fitness = 0;
 
@@ -86,5 +100,89 @@ public class GeneticAlgorithm {
         }
         individual.setFitness(fitness);
         return fitness;
+    }
+
+    /**
+     * Method to evaluate the fitness of the whole population
+     *
+     * Loop over the individuals in the population and calculate the
+     * fitness of each one, after which the algorithm will calculate
+     * the fitness of the whole population
+     * @param population
+     */
+    public void evaluatePopulation(Population population) {
+        double populationFitness = 0;
+
+        for (Individual individual : population.getIndividuals()) {
+            populationFitness += calcFitness(individual);
+        }
+        population.setPopulationFitness(populationFitness);
+    }
+
+    /**
+     * Check if the population has reached the termination condition
+     *
+     * If yes, stop the algorithm (this will be based on the set amount of generations)
+     * @param generationsCount
+     * @param maxGeneration
+     * @return
+     */
+    public boolean isTerminationConditionMet(int generationsCount, int maxGeneration) {
+        return (generationsCount > maxGeneration);
+    }
+
+    /**
+     * A method used for selecting parents for crossover
+     * based on tournament selection
+     *
+     * Tournament selection works by choosing N random individuals
+     * and then choosing the best of them
+     * @param population
+     * @return
+     */
+    public Individual selectParent(Population population) {
+        Population tournament = new Population(this.tournamentSize);
+
+        //Shuffle the given population
+        population.shuffle();
+        for (int i = 0; i < this.tournamentSize; i++) {
+            Individual tournamentIndividual = population.getIndividual(i);
+            tournament.setIndividual(i, tournamentIndividual);
+        }
+        //Return the best individual
+        return tournament.getFittest(0);
+    }
+
+    /**
+     * A method to crossover the population using half of parent1's
+     * genes and half of parent2's genes
+     * @param population
+     * @return
+     */
+    public Population crossoverPopulation(Population population) {
+        Population newPopulation = new Population(population.size());
+
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
+            Individual parent1 = population.getFittest(populationIndex);
+
+            if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
+                Individual offspring = new Individual(parent1.getChromosomeLength());
+                Individual parent2 = this.selectParent(population);
+
+                int swapPoint = parent1.getChromosomeLength() / 2;
+
+                for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
+                    if (geneIndex < swapPoint) {
+                        offspring.setGene(geneIndex, parent1.getGene(geneIndex));
+                    } else {
+                        offspring.setGene(geneIndex, parent2.getGene(geneIndex));
+                    }
+                }
+                newPopulation.setIndividual(populationIndex, offspring);
+            } else {
+                newPopulation.setIndividual(populationIndex, parent1);
+            }
+        }
+        return newPopulation;
     }
 }
