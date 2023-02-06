@@ -1,5 +1,7 @@
 package MuscleBuilding_1st_Version;
 
+import java.util.Random;
+
 public class GeneticAlgorithm {
     private int populationSize;
     private double mutationRate;
@@ -28,6 +30,8 @@ public class GeneticAlgorithm {
      *
      * TODO: Calculate the fitness score based on how the workouts progress over the 4 weeks
      * (sets and reps and later more difficult exercises)
+     *
+     * TODO: Calculate the fitness depending on whether the exercises repeat in a single workout
      *
      * @param individual
      * @return
@@ -123,6 +127,9 @@ public class GeneticAlgorithm {
      * Check if the population has reached the termination condition
      *
      * If yes, stop the algorithm (this will be based on the set amount of generations)
+     *
+     * TODO: Implement different termination conditions and test their performance
+     *
      * @param generationsCount
      * @param maxGeneration
      * @return
@@ -137,6 +144,8 @@ public class GeneticAlgorithm {
      *
      * Tournament selection works by choosing N random individuals
      * and then choosing the best of them
+     *
+     * TODO: Implement multiple selection methods and test their performance
      * @param population
      * @return
      */
@@ -154,8 +163,11 @@ public class GeneticAlgorithm {
     }
 
     /**
-     * A method to crossover the population using half of parent1's
-     * genes and half of parent2's genes
+     * A crossover method for the population using half of parent1's
+     * genes and half of parent2's genes for the offspring
+     *
+     * TODO: Implement multiple crossover methods for testing
+     *
      * @param population
      * @return
      */
@@ -183,6 +195,57 @@ public class GeneticAlgorithm {
                 newPopulation.setIndividual(populationIndex, parent1);
             }
         }
+        return newPopulation;
+    }
+
+    /**
+     * A method used for applying mutation to the population
+     *
+     * TODO: Implement different mutation methods and test the results
+     * @param population
+     * @return
+     */
+    public Population mutatePopulation(Population population) {
+        int positionTracker = 0;
+        // Initialize a new population
+        Population newPopulation = new Population(this.populationSize);
+
+        // Loop over the current population based on the fitness of the individuals
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex ++) {
+            Individual individual = population.getFittest(populationIndex);
+
+            // Loop over individuals
+            for (int geneIndex = 0; geneIndex < individual.getChromosomeLength(); geneIndex++) {
+                // Only mutate the individuals that are not elite
+                if (populationIndex >= this.elitismCount) {
+                    // If mutation occurs...
+                    if (this.mutationRate > Math.random()) {
+                        Random random = new Random();
+                        int newGene = 1;
+
+                        // Keep track of the different mutations for exercises, sets, and reps
+                        if (positionTracker == 0) {
+                            newGene = random.nextInt(25) + 1;
+                        } else if (positionTracker == 1) {
+                            newGene = random.nextInt(5) + 1;
+                        } else {
+                            newGene = random.nextInt(7) + 6;
+                        }
+                        // Mutate the specific gene of the individual
+                        individual.setGene(geneIndex, newGene);
+                    }
+                }
+                // Position tracker is used to know what the gene in the loop represents
+                if (positionTracker == 2) {
+                    positionTracker = 0;
+                } else {
+                    positionTracker++;
+                }
+            }
+            // Add the individual to the new population
+            newPopulation.setIndividual(populationIndex, individual);
+        }
+        // Return the mutated population
         return newPopulation;
     }
 }
