@@ -5,6 +5,7 @@ package MuscleBuilding_1st_Version;
  */
 
 public class MuscleBuildingGA {
+
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
 
@@ -30,7 +31,7 @@ public class MuscleBuildingGA {
          */
         while (!geneticAlgorithm.isTerminationConditionMet(generation, maxGenerations)) {
             // Print the fittest individual from the population
-            System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
+//            System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
 
             // Apply crossover
             population = geneticAlgorithm.crossoverPopulation(population);
@@ -46,6 +47,12 @@ public class MuscleBuildingGA {
         }
         // Print the final solution
         System.out.println("Stopped after " + maxGenerations + " generations");
-        System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
+//        System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
+
+        // Testing the new printing of the solution
+        Individual solution = population.getFittest(0);
+        solution.solutionToString();
+        // Print the fitness of the individual
+        System.out.println(solution.getFitness());
     }
 }

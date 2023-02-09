@@ -1,5 +1,6 @@
 package MuscleBuilding_1st_Version;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -81,5 +82,68 @@ public class Individual {
             output.append(this.chromosome[gene]);
         }
         return output.toString();
+    }
+
+    /**
+     * A method to output the solution in a more readable format with
+     * words, and not an int chromosome
+     */
+    public void solutionToString() {
+        // A hashmap to store the exercise IDs and the names of the exercises as values
+        HashMap<Integer, String> exerciseMap = new HashMap<>();
+
+        // Keeps track of the workouts for printing
+        int counter = 1;
+
+        // Array to store all the available exercises (currently 25)
+        String [] exercises = {
+                "Flat Barbell Bench Press",
+                "Incline Dumbbell Bench Press",
+                "Body-weight Dips",
+                "Push-ups",
+                "Cable Chest Fly's",
+                "Pull-ups",
+                "Deadlifts",
+                "Bent-Over Rows",
+                "Dumbbell Shrugs",
+                "Lat Pull-down",
+                "Front Squats",
+                "Romanian Deadlift",
+                "Lunges",
+                "Glute Bridge",
+                "Bulgarian split squats",
+                "Barbell Bicep Curl",
+                "Incline Bicep Curl",
+                "Skull Crushers",
+                "Cable Triceps Push-down",
+                "Seated Dumbbell Shoulder Press",
+                "Russian twists",
+                "Plank hold",
+                "Leg raises",
+                "Toe touches crunches",
+                "Cable rotations"
+        };
+
+        // Populate the hashmap with exercise IDs and exercise names
+        for (int i = 0; i < exercises.length; i++) {
+            exerciseMap.put(i + 1, exercises[i]);
+        }
+
+        System.out.println("<-------------------------------------------------------" +
+                " Optimized Workout Schedule " +
+                " ------------------------------------------------------->");
+
+        // A for loop to print out individual exercises and their corresponding sets and reps
+        for (int i = 0; i < this.chromosome.length; i += 3) {
+            System.out.print(exerciseMap.get(this.chromosome[i]) + " -->" + " Sets: " +
+                    this.chromosome[i + 1] + " Reps: " + this.chromosome[i + 2]);
+            System.out.println();
+
+            if ((i + 3) % 18 == 0) {
+                System.out.println("<---------------------------------------- Workout " +
+                        counter + " ---------------------------------------->");
+                counter++;
+            }
+        }
     }
 }
