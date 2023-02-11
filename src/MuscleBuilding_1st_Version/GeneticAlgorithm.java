@@ -24,13 +24,13 @@ public class GeneticAlgorithm {
 
     /**
      * Method used for calculating the fitness of the individual
-     *
+     * <p>
      * For now this will be based on the frequency of body parts trained in an
      * exercise and the amount of sets and reps trained per exercise
-     *
+     * <p>
      * TODO: Calculate the fitness score based on how the workouts progress over the 4 weeks
      * (sets and reps and later more difficult exercises)
-     *
+     * <p>
      * TODO: Calculate the fitness depending on whether the exercises repeat in a single workout
      *
      * @param individual
@@ -39,7 +39,7 @@ public class GeneticAlgorithm {
     public double calcFitness(Individual individual) {
         int fitness = 0;
 
-        for (int workout = 0; workout <= individual.getChromosomeLength() / 18; workout ++) {
+        for (int workout = 0; workout <= individual.getChromosomeLength() / 18; workout++) {
 
             int chestTrained = 0;
             int backTrained = 0;
@@ -49,7 +49,7 @@ public class GeneticAlgorithm {
 
             for (int exercise = 0; exercise < 6; exercise++) {
                 for (int gene = 0; gene < 3; gene++) {
-                    int chromosomePosition = gene + exercise*3 + workout*6;
+                    int chromosomePosition = gene + exercise * 3 + workout * 6;
                     int currentGene = individual.getGene(chromosomePosition);
 
                     // Calculate the number of exercises per body part
@@ -67,55 +67,63 @@ public class GeneticAlgorithm {
                         }
                         //Calculate the fitness according to the sets
                     } else if (gene == 1) {
-                        if (currentGene > 3) {
-                            fitness = currentGene - 3;
-                        } else if (currentGene < 3) {
-                            fitness = currentGene + 3;
-                        } else {
-                            fitness += 10;
+                        if (currentGene == 5) {
+                            fitness += 25;
+                        } else if (currentGene == 4) {
+                            fitness += 50;
+                        } else if (currentGene == 3) {
+                            fitness += 100;
                         }
+//                        else if (currentGene < 3) {
+//                            fitness -= 25;
+//                        } else if (currentGene > 5) {
+//                            fitness -= 50 + (currentGene - 3);
+//                        }
                         // Calculate the fitness according to the reps
                     } else {
-                        if (currentGene > 12) {
-                            fitness -= currentGene - 12;
-                        } else if (currentGene < 6) {
-                            fitness -= currentGene;
-                        } else if (currentGene < 8 && currentGene >= 6) {
-                            fitness += 2;
+//                        if (currentGene > 12) {
+//                            fitness -= 50 + (currentGene - 12);
+//                        } else
+                        if (currentGene <= 12 && currentGene >= 10) {
+                            fitness += 100;
                         } else if (currentGene < 10 && currentGene >= 8) {
-                            fitness += 5;
-                        } else if (currentGene <= 12 && currentGene >= 10) {
-                            fitness++;
+                            fitness += 50;
+                        } else if (currentGene < 8 && currentGene >= 6) {
+                            fitness += 25;
                         }
+//                        else if (currentGene < 6) {
+//                            fitness -= 25;
+//                        }
                     }
                 }
             }
             if (chestTrained > 2) {
-                fitness -= chestTrained - 2;
+                fitness -= 100;
             } else if (backTrained > 2) {
-                fitness -= backTrained - 2;
+                fitness -= 100;
             } else if (legsTrained > 2) {
-                fitness -= backTrained - 2;
+                fitness -= 100;
             } else if (armsShouldersTrained > 2) {
-                fitness -= backTrained - 2;
+                fitness -= 100;
             } else if (coreTrained > 2) {
-                fitness -= backTrained - 2;
+                fitness -= 100;
             }
         }
         individual.setFitness(fitness);
 
         //Used to check how the fitness values look like for individuals
-        //System.out.println(fitness);
+        System.out.println(fitness);
 
         return fitness;
     }
 
     /**
      * Method to evaluate the fitness of the whole population
-     *
+     * <p>
      * Loop over the individuals in the population and calculate the
      * fitness of each one, after which the algorithm will calculate
      * the fitness of the whole population
+     *
      * @param population
      */
     public void evaluatePopulation(Population population) {
@@ -129,9 +137,9 @@ public class GeneticAlgorithm {
 
     /**
      * Check if the population has reached the termination condition
-     *
+     * <p>
      * If yes, stop the algorithm (this will be based on the set amount of generations)
-     *
+     * <p>
      * TODO: Implement different termination conditions and test their performance
      *
      * @param generationsCount
@@ -145,11 +153,12 @@ public class GeneticAlgorithm {
     /**
      * A method used for selecting parents for crossover
      * based on tournament selection
-     *
+     * <p>
      * Tournament selection works by choosing N random individuals
      * and then choosing the best of them
-     *
+     * <p>
      * TODO: Implement multiple selection methods and test their performance
+     *
      * @param population
      * @return
      */
@@ -169,7 +178,7 @@ public class GeneticAlgorithm {
     /**
      * A crossover method for the population using half of parent1's
      * genes and half of parent2's genes for the offspring
-     *
+     * <p>
      * TODO: Implement multiple crossover methods for testing
      *
      * @param population
@@ -204,8 +213,9 @@ public class GeneticAlgorithm {
 
     /**
      * A method used for applying mutation to the population
-     *
+     * <p>
      * TODO: Implement different mutation methods and test the results
+     *
      * @param population
      * @return
      */
@@ -215,7 +225,7 @@ public class GeneticAlgorithm {
         Population newPopulation = new Population(this.populationSize);
 
         // Loop over the current population based on the fitness of the individuals
-        for (int populationIndex = 0; populationIndex < population.size(); populationIndex ++) {
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
             Individual individual = population.getFittest(populationIndex);
 
             // Loop over individuals
