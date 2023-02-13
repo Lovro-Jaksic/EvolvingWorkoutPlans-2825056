@@ -34,7 +34,7 @@ public class MuscleBuildingGA {
 //            System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
 
             // Apply crossover
-            population = geneticAlgorithm.crossoverPopulation(population);
+            population = geneticAlgorithm.uniformCrossover(population);
 
             // Apply mutation
             population = geneticAlgorithm.mutatePopulation(population);

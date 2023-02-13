@@ -178,13 +178,16 @@ public class GeneticAlgorithm {
     /**
      * A crossover method for the population using half of parent1's
      * genes and half of parent2's genes for the offspring
-     * <p>
-     * TODO: Implement multiple crossover methods for testing
+     *
+     * If the crossover condition is not met, the fittest individual is
+     * simply copied over to the new population
+     *
+     * TODO: Implement a heuristic crossover method?
      *
      * @param population
      * @return
      */
-    public Population crossoverPopulation(Population population) {
+    public Population singlePointCrossover(Population population) {
         Population newPopulation = new Population(population.size());
 
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
@@ -202,6 +205,176 @@ public class GeneticAlgorithm {
                     } else {
                         offspring.setGene(geneIndex, parent2.getGene(geneIndex));
                     }
+                }
+                newPopulation.setIndividual(populationIndex, offspring);
+            } else {
+                newPopulation.setIndividual(populationIndex, parent1);
+            }
+        }
+        return newPopulation;
+    }
+
+    /**
+     * A crossover method for the population that will choose
+     * a random single crossover point based on which the genes for the
+     * offspring will be selected
+     *
+     * Genes before the crossover point will come from parent1
+     * and the genes after the crossover point will come from parent2
+     *
+     * Better performance than single point crossover using half of both
+     * parents' genes
+     *
+     * If the crossover condition is not met, the fittest individual is
+     * simply copied over to the new population
+     *
+     * @param population
+     * @return
+     */
+    public Population randomSinglePointCrossover(Population population) {
+        Population newPopulation = new Population(population.size());
+
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
+            Individual parent1 = population.getFittest(populationIndex);
+
+            if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
+                Individual offspring = new Individual(parent1.getChromosomeLength());
+                Individual parent2 = this.selectParent(population);
+
+                int swapPoint = (int) (Math.random() * parent1.getChromosomeLength());
+
+                for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
+                    if (geneIndex < swapPoint) {
+                        offspring.setGene(geneIndex, parent1.getGene(geneIndex));
+                    } else {
+                        offspring.setGene(geneIndex, parent2.getGene(geneIndex));
+                    }
+                }
+                newPopulation.setIndividual(populationIndex, offspring);
+            } else {
+                newPopulation.setIndividual(populationIndex, parent1);
+            }
+        }
+        return newPopulation;
+    }
+
+    /**
+     * A crossover method for the population that will choose
+     * 2 random crossover points based on which the genes for the
+     * offspring will be selected
+     *
+     * Genes between the 2 crossover points will come from parent2
+     * and all the other genes will come from parent1
+     *
+     * If the crossover condition is not met, the fittest individual is
+     * simply copied over to the new population
+     *
+     * @param population
+     * @return
+     */
+    public Population randomTwoPointCrossover(Population population) {
+        Population newPopulation = new Population(population.size());
+
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
+            Individual parent1 = population.getFittest(populationIndex);
+
+            if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
+                Individual offspring = new Individual(parent1.getChromosomeLength());
+                Individual parent2 = this.selectParent(population);
+
+                int crossoverPoint1 = (int) (Math.random() * parent1.getChromosomeLength());
+                int crossoverPoint2 = (int) (Math.random() * parent1.getChromosomeLength());
+
+                if (crossoverPoint1 > crossoverPoint2) {
+                    int temp = crossoverPoint1;
+                    crossoverPoint1 = crossoverPoint2;
+                    crossoverPoint2 = temp;
+                }
+
+                for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
+                    if (geneIndex >= crossoverPoint1 && geneIndex <= crossoverPoint2) {
+                        offspring.setGene(geneIndex, parent2.getGene(geneIndex));
+                    } else {
+                        offspring.setGene(geneIndex, parent1.getGene(geneIndex));
+                    }
+                }
+                newPopulation.setIndividual(populationIndex, offspring);
+            } else {
+                newPopulation.setIndividual(populationIndex, parent1);
+            }
+        }
+        return newPopulation;
+    }
+
+    /**
+     * A crossover method for the population that will choose
+     * the genes for the offspring based on parent's genes.
+     *
+     * Each offspring's gene will have 50% chance to come either
+     * from paren1 or from parent2
+     *
+     * If the crossover condition is not met, the fittest individual is
+     * simply copied over to the new population
+     *
+     * Best performance so far, but for some reason the number of
+     * sets starts rising as the number of workouts rises
+     *
+     * @param population
+     * @return
+     */
+    public Population uniformCrossover(Population population) {
+        Population newPopulation = new Population(population.size());
+
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
+            Individual parent1 = population.getFittest(populationIndex);
+
+            if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
+                Individual offspring = new Individual(parent1.getChromosomeLength());
+                Individual parent2 = this.selectParent(population);
+
+                for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
+                    if (Math.random() <= 0.5) {
+                        offspring.setGene(geneIndex, parent1.getGene(geneIndex));
+                    } else {
+                        offspring.setGene(geneIndex, parent2.getGene(geneIndex));
+                    }
+                }
+                newPopulation.setIndividual(populationIndex, offspring);
+            } else {
+                newPopulation.setIndividual(populationIndex, parent1);
+            }
+        }
+        return newPopulation;
+    }
+
+    /**
+     * A crossover method based on arithmetic crossover
+     *
+     * The method combines the genes of the 2 selected parents
+     * using a linear combination, with 'alpha' being the weighing factor
+     *
+     * If the crossover condition is not met, the fittest individual is
+     * simply copied over to the new population
+     *
+     * Second-worst performance, but surprisingly the sets are in a good
+     * range quite consistently, reps are usually below 10
+     *
+     * @param population
+     * @return
+     */
+    public Population arithmeticCrossover(Population population) {
+        Population newPopulation = new Population(population.size());
+
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
+            Individual parent1 = population.getFittest(populationIndex);
+
+            if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
+                Individual offspring = new Individual(parent1.getChromosomeLength());
+                Individual parent2 = this.selectParent(population);
+                double alpha = Math.random();
+
+                for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
+                    offspring.setGene(geneIndex, (int) (alpha * parent1.getGene(geneIndex) + (1 - alpha) * parent2.getGene(geneIndex)));
                 }
                 newPopulation.setIndividual(populationIndex, offspring);
             } else {
