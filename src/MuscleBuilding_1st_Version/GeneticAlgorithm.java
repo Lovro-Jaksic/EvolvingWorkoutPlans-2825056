@@ -386,7 +386,9 @@ public class GeneticAlgorithm {
 
     /**
      * A method used for applying mutation to the population
-     * <p>
+     *
+     * In this case, uniform mutation
+     *
      * TODO: Implement different mutation methods and test the results
      *
      * @param population
@@ -414,9 +416,9 @@ public class GeneticAlgorithm {
                         if (positionTracker == 0) {
                             newGene = random.nextInt(25) + 1;
                         } else if (positionTracker == 1) {
-                            newGene = random.nextInt(5) + 1;
+                            newGene = random.nextInt(3) + 3;
                         } else {
-                            newGene = random.nextInt(7) + 6;
+                            newGene = random.nextInt(3) + 10;
                         }
                         // Mutate the specific gene of the individual
                         individual.setGene(geneIndex, newGene);
