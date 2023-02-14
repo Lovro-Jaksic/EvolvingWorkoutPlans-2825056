@@ -7,14 +7,14 @@ public class GeneticAlgorithm {
     private double mutationRate;
     private double crossoverRate;
     private int elitismCount;
-    protected int tournamentSize;
+    protected int selectionSize;
 
-    public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize) {
+    public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
         this.elitismCount = elitismCount;
-        this.tournamentSize = tournamentSize;
+        this.selectionSize = selectionSize;
     }
 
     public Population initPopulation(int chromosomeLength) {
@@ -162,17 +162,140 @@ public class GeneticAlgorithm {
      * @param population
      * @return
      */
-    public Individual selectParent(Population population) {
-        Population tournament = new Population(this.tournamentSize);
+    public Individual tournamentSelection(Population population) {
+        // Initialize a tournament population
+        Population tournament = new Population(this.selectionSize);
 
         //Shuffle the given population
         population.shuffle();
-        for (int i = 0; i < this.tournamentSize; i++) {
+        // Select the tournament individuals
+        for (int i = 0; i < this.selectionSize; i++) {
             Individual tournamentIndividual = population.getIndividual(i);
             tournament.setIndividual(i, tournamentIndividual);
         }
-        //Return the best individual
+        // Return the fittest individual in the tournament population
         return tournament.getFittest(0);
+    }
+
+    /**
+     * A method used for selecting parents for crossover
+     * based on Roulette Wheel Selection
+     * <p>
+     * In this implementation, a random value is generated between 0 and the total fitness of the population
+     *
+     * The parent is then selected by iterating over the individuals and
+     * subtracting their fitness from the random value
+     *
+     * The first individual whose accumulated fitness is greater than
+     * or equal to the random value is selected as the parent.
+     * <p>
+     *
+     * @param population
+     * @return
+     */
+    public Individual rouletteWheelSelection(Population population) {
+        // Calculate the total fitness of the population
+        double populationFitness = population.getPopulationFitness();
+        System.out.println("Population fitness: " + populationFitness);
+
+        // Generate a random value between 0 and the total fitness of the population
+        double randomRoulettePosition = Math.random() * populationFitness;
+
+        double accumulatedFitness = 0;
+        // Select the parent by iterating over the individuals and subtracting their fitness from the random value
+        for (Individual individual: population.getIndividuals()) {
+            accumulatedFitness += individual.getFitness();
+            if (accumulatedFitness >= randomRoulettePosition) {
+                return individual;
+            }
+        }
+        // Return the last individual in the population if no parent has been selected
+        return population.getIndividual(population.size() - 1);
+    }
+
+    /**
+     * A method used for selecting parents for crossover
+     * based on Stochastic Universal Sampling (SUS) selection
+     *
+     * In this implementation, we first calculate the sum of the fitness of all individuals in the population.
+     * Then, we calculate the average fitness by dividing the fitness sum by the population size.
+     * After that, we choose a random number pointer between 0 and the average fitness.
+     *
+     * Next, we loop through the individuals in the population, and keep track
+     * of the cumulative fitness by adding the fitness of each individual to the cumulative fitness.
+     *
+     * When the pointer becomes less than the cumulative fitness,
+     * we have found the selected parent, and we return that individual.
+     *
+     *
+     * @param population
+     * @return
+     */
+    public Individual stochasticSelection(Population population) {
+        int populationSize = population.size();
+        // Calculate the total fitness of the population
+        double populationFitness = population.getPopulationFitness();
+        // Calculate the average fitness of the population
+        double averageFitness = populationFitness / populationSize;
+
+        // Randomly select a pointer that falls within the range of the average fitness
+        double pointer = Math.random() * averageFitness;
+
+        // Initialize an index to keep track of the selected individual
+        int index = 0;
+        double cumulativeFitness = population.getIndividual(index).getFitness();
+
+        // Loop until the pointer falls within the cumulative fitness range of an individual
+        while(pointer > cumulativeFitness) {
+            index++;
+            // Update the cumulative fitness with the fitness of the next individual
+            cumulativeFitness += population.getIndividual(index).getFitness();
+        }
+        return population.getIndividual(index);
+    }
+
+    /**
+     * A method used for selecting parents for crossover
+     * based on Truncation selection
+     *
+     * The basic idea behind truncation selection is to select a portion of the fittest individuals
+     * from the current population and then choose one of those individuals as a parent
+     *
+     * The selectionSize variable in this case is used as a percentage of the
+     * population that should be used for the selection of the parent and
+     * for the size of the new truncated population
+     *
+     * The fittest individuals from the current population are then selected and added to
+     * the truncation population one by one.
+     *
+     * Finally, the fittest individual in the truncation population is selected and returned as the parent.
+     *
+     * However, if the same selectionSize is used the first parent in the
+     * crossover will always be the same which is not really desirable
+     * so I don't know how useful this method will be
+     *
+     *
+     * @param population
+     * @return
+     */
+    public Individual truncationSelection(Population population) {
+        int populationSize = population.size();
+        // Calculate the truncation index, which is a fraction of the population size determined by the selection size parameter
+        int truncationIndex = (int) (populationSize * this.selectionSize);
+
+        // Create a new population with the truncation size
+        Population truncationPopulation = new Population(truncationIndex);
+
+        // Loop through the truncation size
+        for (int i = 0; i < truncationIndex; i++) {
+            // Get the fittest individual in the population
+            Individual truncationIndividual = population.getFittest(i);
+            // Add the individual to the truncation population
+            truncationPopulation.setIndividual(i, truncationIndividual);
+        }
+
+        // Return the fittest individual in the truncation population
+        return truncationPopulation.getFittest(0);
     }
 
     /**
@@ -195,7 +318,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.selectParent(population);
+                Individual parent2 = this.stochasticSelection(population);
 
                 int swapPoint = parent1.getChromosomeLength() / 2;
 
@@ -239,7 +362,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.selectParent(population);
+                Individual parent2 = this.stochasticSelection(population);
 
                 int swapPoint = (int) (Math.random() * parent1.getChromosomeLength());
 
@@ -280,7 +403,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.selectParent(population);
+                Individual parent2 = this.stochasticSelection(population);
 
                 int crossoverPoint1 = (int) (Math.random() * parent1.getChromosomeLength());
                 int crossoverPoint2 = (int) (Math.random() * parent1.getChromosomeLength());
@@ -330,7 +453,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.selectParent(population);
+                Individual parent2 = this.stochasticSelection(population);
 
                 for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
                     if (Math.random() <= 0.5) {
@@ -370,7 +493,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.selectParent(population);
+                Individual parent2 = this.stochasticSelection(population);
                 double alpha = Math.random();
 
                 for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
