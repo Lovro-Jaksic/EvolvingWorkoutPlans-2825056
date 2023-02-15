@@ -271,7 +271,7 @@ public class GeneticAlgorithm {
      * Finally, the fittest individual in the truncation population is selected and returned as the parent.
      *
      * However, if the same selectionSize is used the first parent in the
-     * crossover will always be the same which is not really desirable
+     * crossover will always be the same which is not really desirable,
      * so I don't know how useful this method will be
      *
      *
@@ -296,6 +296,60 @@ public class GeneticAlgorithm {
 
         // Return the fittest individual in the truncation population
         return truncationPopulation.getFittest(0);
+    }
+
+    /**
+     * A method used for selecting parents for crossover
+     * based on Linear Rank selection
+     *
+     * The basic idea behind rank selection is to assign a rank to each individual
+     * in the population based on their fitness
+     *
+     * Individuals with higher fitness are assigned
+     * lower ranks. The selection process then involves selecting individuals based on their rank
+     *
+     * This implementation of rank selection is based on a linear distribution of ranks,
+     * where the probability of an individual being selected is proportional to their rank
+     *
+     * The rank size variable is used to determine the number of individuals to select based on rank
+     *
+     * Finally, a parent is selected from the rank population based on rank-based probability and returned
+     *
+     * The probability of an individual being selected is proportional to their rank-based probability
+     *
+     *
+     * @param population
+     * @return
+     */
+    public Individual linearRankSelection(Population population) {
+        int populationSize = population.size();
+        double [] cumulativeFitness = new double[populationSize];
+        double totalCumulativeFitness = 0;
+
+        Individual[] individuals = new Individual[populationSize];
+
+        // Rank the individuals based on their fitness in ascending order
+        for (int i = 0; i < populationSize; i++) {
+            individuals[i] = population.getFittest(i);
+        }
+
+        // Calculate the cumulative fitness of each individual based on their rank
+        for (int i = 0; i < populationSize; i++) {
+            totalCumulativeFitness += (populationSize - 1);
+            cumulativeFitness[i] = totalCumulativeFitness;
+        }
+
+        // Generate a random value between 0 and the total cumulative fitness of the population
+        double randomLinearRank = Math.random() * totalCumulativeFitness;
+
+        // Select the parent by iterating over the individuals and subtracting their cumulative fitness from the random value
+        for (int i = 0; i < populationSize; i++) {
+            if (cumulativeFitness[i] >= randomLinearRank) {
+                return individuals[i];
+            }
+        }
+        // Return the last individual in the population if no parent has been selected
+        return population.getIndividual(population.size() - 1);
     }
 
     /**
