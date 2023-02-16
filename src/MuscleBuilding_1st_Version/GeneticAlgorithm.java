@@ -112,7 +112,7 @@ public class GeneticAlgorithm {
         individual.setFitness(fitness);
 
         //Used to check how the fitness values look like for individuals
-        System.out.println(fitness);
+//        System.out.println(fitness);
 
         return fitness;
     }

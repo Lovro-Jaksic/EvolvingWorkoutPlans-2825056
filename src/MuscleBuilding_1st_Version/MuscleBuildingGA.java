@@ -12,21 +12,42 @@ public class MuscleBuildingGA {
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 250;
 
+    // Define the hyperparameter grid
+    public static Map<String, double[]> hyperParameters = new HashMap<>();
+
+    // Initialize the best result and its corresponding hyperparameters
+    public static double bestFitness = Double.NEGATIVE_INFINITY;
+    public static Map<String, Double> bestHyperparameters = new HashMap<>();
+
     public static void main(String[] args) {
-        // Define the hyperparameter grid
-        Map<String, double[]> hyperParameters = new HashMap<>();
+        // Populate the hyperparameter grid
         hyperParameters.put("populationSize", new double[] {50, 70, 100, 150, 200});
         hyperParameters.put("mutationRate", new double[] {0.001, 0.005, 0.01, 0.02, 0.05});
         hyperParameters.put("crossoverRate", new double[] {0.5, 0.7, 0.8, 0.9, 0.95});
         hyperParameters.put("elitismCount", new double[] {1, 2, 4, 5, 8});
         hyperParameters.put("selectionSize", new double[] {1, 3, 5, 8, 10});
 
+//        // Loop through all possible combinations of hyperparameters
+//        for (double populationSize : hyperParameters.get("populationSize")) {
+//            for (double mutationRate : hyperParameters.get("mutationRate")) {
+//                for (double crossoverRate : hyperParameters.get("crossoverRate")) {
+//                    for (double elitismCount : hyperParameters.get("elitismCount")) {
+//                        for (double selectionSize : hyperParameters.get("selectionSize")) {
+//                            // Call the method for running the genetic algorithm
+//                            runGeneticAlgorithm((int) populationSize, mutationRate, crossoverRate,
+//                                    (int) elitismCount, (int) selectionSize);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        // Print the best result and its corresponding hyperparameters
+//        System.out.println("Best result: " + bestFitness);
+//        System.out.println("Best hyperparameters: " + bestHyperparameters.toString());
+
         runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
                 hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
                 (int) hyperParameters.get("selectionSize")[2]);
-
-        // Create a genetic algorithm object
-//        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(100, 0.001, 0.95, 2, 5);
 
     }
 
@@ -66,6 +87,18 @@ public class MuscleBuildingGA {
             // Increment the generation count
             generation++;
         }
+
+        // Check if the current result is better than the previous best result
+//        double currentFitness = population.getFittest(0).getFitness();
+//        if (currentFitness > bestFitness) {
+//            bestFitness = currentFitness;
+//            bestHyperparameters.put("populationSize", (double) populationSize);
+//            bestHyperparameters.put("mutationRate", mutationRate);
+//            bestHyperparameters.put("crossoverRate", crossoverRate);
+//            bestHyperparameters.put("elitismCount", (double) elitismCount);
+//            bestHyperparameters.put("selectionSize", (double) selectionSize);
+//        }
+
         // Print the final solution
         System.out.println("Stopped after " + maxGenerations + " generations");
 //        System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
