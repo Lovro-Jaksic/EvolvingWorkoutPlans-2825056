@@ -1,6 +1,8 @@
 package MuscleBuilding_1st_Version;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class GeneticAlgorithm {
     private int populationSize;
@@ -39,8 +41,17 @@ public class GeneticAlgorithm {
     public double calcFitness(Individual individual) {
         int fitness = 0;
 
+        // Workouts per week for the beginner programme (minus 1 because the loops start at index 0)
+        int week1 = 3 - 1;
+        int week2 = 3 - 1;
+        int week3 = 4 - 1;
+        int week4 = 4 - 1;
+
+        // For now, 14 exercises in total across the 4 weeks for the beginner workout programme
         for (int workout = 0; workout <= individual.getChromosomeLength() / 18; workout++) {
 
+            // HashSet for checking whether exercises repeat in a workout
+            Set<Integer> selectedExercises = new HashSet<>();
             int chestTrained = 0;
             int backTrained = 0;
             int legsTrained = 0;
@@ -54,15 +65,25 @@ public class GeneticAlgorithm {
 
                     // Calculate the number of exercises per body part
                     if (gene == 0) {
+                        if (selectedExercises.contains(currentGene)) {
+                            fitness -= 200;
+                        }
+                        if (!selectedExercises.contains(currentGene)){
+                            selectedExercises.add(currentGene);
+                        }
                         if (currentGene <= 5) {
                             chestTrained++;
-                        } else if (currentGene > 5 && currentGene <= 10) {
+                        }
+                        if (currentGene > 5 && currentGene <= 10) {
                             backTrained++;
-                        } else if (currentGene > 10 && currentGene <= 15) {
+                        }
+                        if (currentGene > 10 && currentGene <= 15) {
                             legsTrained++;
-                        } else if (currentGene > 15 && currentGene <= 20) {
+                        }
+                        if (currentGene > 15 && currentGene <= 20) {
                             armsShouldersTrained++;
-                        } else {
+                        }
+                        if (currentGene > 20 && currentGene <= 25){
                             coreTrained++;
                         }
                         //Calculate the fitness according to the sets
@@ -113,7 +134,6 @@ public class GeneticAlgorithm {
 
         //Used to check how the fitness values look like for individuals
 //        System.out.println(fitness);
-
         return fitness;
     }
 
