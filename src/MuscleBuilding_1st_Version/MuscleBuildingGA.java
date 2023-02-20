@@ -10,7 +10,7 @@ import java.util.Map;
 public class MuscleBuildingGA {
 
     // The number of generations used for terminating the algorithm
-    public static int maxGenerations = 250;
+    public static int maxGenerations = 500;
 
     // Define the hyperparameter grid
     public static Map<String, double[]> hyperParameters = new HashMap<>();

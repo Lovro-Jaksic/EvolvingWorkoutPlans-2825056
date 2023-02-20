@@ -29,11 +29,10 @@ public class GeneticAlgorithm {
      * <p>
      * For now this will be based on the frequency of body parts trained in an
      * exercise and the amount of sets and reps trained per exercise
-     * <p>
-     * TODO: Calculate the fitness score based on how the workouts progress over the 4 weeks
+     *
      * (sets and reps and later more difficult exercises)
-     * <p>
-     * TODO: Calculate the fitness depending on whether the exercises repeat in a single workout
+     *
+     * TODO: For some reason, the workouts begin well then the performance drops significantly after a couple of workouts
      *
      * @param individual
      * @return
@@ -46,6 +45,12 @@ public class GeneticAlgorithm {
         int week2 = 3 - 1;
         int week3 = 4 - 1;
         int week4 = 4 - 1;
+
+        // Sets and reps ideal goals for each week, used for progressive overload
+        int[] setsRepsWeek1 = {2, 8, 10};
+        int[] setsRepsWeek2 = {3, 8, 10};
+        int[] setsRepsWeek3 = {3, 10, 12};
+        int[] setsRepsWeek4 = {3, 12, 14};
 
         // For now, 14 exercises in total across the 4 weeks for the beginner workout programme
         for (int workout = 0; workout <= individual.getChromosomeLength() / 18; workout++) {
@@ -86,35 +91,60 @@ public class GeneticAlgorithm {
                         if (currentGene > 20 && currentGene <= 25){
                             coreTrained++;
                         }
-                        //Calculate the fitness according to the sets
+                        //Calculate the fitness according to the sets and progressive overload
                     } else if (gene == 1) {
-                        if (currentGene == 5) {
-                            fitness += 25;
-                        } else if (currentGene == 4) {
-                            fitness += 50;
-                        } else if (currentGene == 3) {
-                            fitness += 100;
+                        if (workout < 3) {
+                            if (currentGene == setsRepsWeek1[0]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
+                        } else if (workout > 2 && workout < 6) {
+                            if (currentGene == setsRepsWeek2[0]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
+                        } else if (workout > 5 && workout < 9) {
+                            if (currentGene == setsRepsWeek3[0]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
+                        } else {
+                            if (currentGene == setsRepsWeek4[0]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
                         }
-//                        else if (currentGene < 3) {
-//                            fitness -= 25;
-//                        } else if (currentGene > 5) {
-//                            fitness -= 50 + (currentGene - 3);
-//                        }
-                        // Calculate the fitness according to the reps
+                        // Calculate the fitness according to the reps and progressive overload
                     } else {
-//                        if (currentGene > 12) {
-//                            fitness -= 50 + (currentGene - 12);
-//                        } else
-                        if (currentGene <= 12 && currentGene >= 10) {
-                            fitness += 100;
-                        } else if (currentGene < 10 && currentGene >= 8) {
-                            fitness += 50;
-                        } else if (currentGene < 8 && currentGene >= 6) {
-                            fitness += 25;
+                        if (workout < 3) {
+                            if (currentGene >= setsRepsWeek1[1] && currentGene <= setsRepsWeek1[2]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
+                        } else if (workout > 2 && workout < 6) {
+                            if (currentGene >= setsRepsWeek2[1] && currentGene <= setsRepsWeek2[2]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
+                        } else if (workout > 5 && workout < 9) {
+                            if (currentGene >= setsRepsWeek3[1] && currentGene <= setsRepsWeek3[2]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
+                        } else {
+                            if (currentGene >= setsRepsWeek4[1] && currentGene <= setsRepsWeek4[2]) {
+                                fitness += 100;
+                            } else {
+                                fitness -= 200;
+                            }
                         }
-//                        else if (currentGene < 6) {
-//                            fitness -= 25;
-//                        }
                     }
                 }
             }
@@ -247,7 +277,7 @@ public class GeneticAlgorithm {
      * When the pointer becomes less than the cumulative fitness,
      * we have found the selected parent, and we return that individual.
      *
-     *
+     * TODO: An error with indexing in stochastic selection
      * @param population
      * @return
      */
@@ -267,9 +297,9 @@ public class GeneticAlgorithm {
 
         // Loop until the pointer falls within the cumulative fitness range of an individual
         while(pointer > cumulativeFitness) {
-            index++;
             // Update the cumulative fitness with the fitness of the next individual
             cumulativeFitness += population.getIndividual(index).getFitness();
+            index++;
         }
         return population.getIndividual(index);
     }
@@ -392,7 +422,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.stochasticSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 int swapPoint = parent1.getChromosomeLength() / 2;
 
@@ -436,7 +466,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.stochasticSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 int swapPoint = (int) (Math.random() * parent1.getChromosomeLength());
 
@@ -477,7 +507,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.stochasticSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 int crossoverPoint1 = (int) (Math.random() * parent1.getChromosomeLength());
                 int crossoverPoint2 = (int) (Math.random() * parent1.getChromosomeLength());
@@ -527,7 +557,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.stochasticSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
                     if (Math.random() <= 0.5) {
@@ -567,7 +597,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.stochasticSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
                 double alpha = Math.random();
 
                 for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
