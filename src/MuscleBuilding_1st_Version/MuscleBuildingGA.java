@@ -88,7 +88,7 @@ public class MuscleBuildingGA {
             generation++;
         }
 
-        // Check if the current result is better than the previous best result
+//         Check if the current result is better than the previous best result
 //        double currentFitness = population.getFittest(0).getFitness();
 //        if (currentFitness > bestFitness) {
 //            bestFitness = currentFitness;

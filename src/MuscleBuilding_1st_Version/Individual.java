@@ -142,6 +142,8 @@ public class Individual {
      * In total there will be 252 genes to fit all the required criteria (14 workouts *
      * 6 exercises per workout * 3 genes per exercise (exerciseID, sets, reps))
      *
+     * Ranges for randomisation depend on the gene position
+     *
      *
      * @param chromosomeLength
      */
@@ -149,7 +151,17 @@ public class Individual {
         this.chromosome = new int[chromosomeLength];
         for (int gene = 0; gene <  chromosomeLength; gene++) {
             Random random = new Random();
-            int randomNumber = random.nextInt(25) + 1;
+            int randomNumber;
+            if (gene % 3 == 0) {
+                // generate random number between 1 and 25 for index 0, 3, 6, 9, etc.
+                randomNumber = random.nextInt(25) + 1;
+            } else if (gene % 3 == 1) {
+                // generate random number between 1 and 5 for index 1, 4, 7, 10, etc.
+                randomNumber = random.nextInt(5) + 1;
+            } else {
+                // generate random number between 8 and 14 for index 2, 5, 8, 11, etc.
+                randomNumber = random.nextInt(9) + 6;
+            }
             this.setGene(gene, randomNumber);
         }
     }
