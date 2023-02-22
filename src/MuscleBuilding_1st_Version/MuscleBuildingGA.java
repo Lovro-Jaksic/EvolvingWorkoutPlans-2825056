@@ -45,10 +45,15 @@ public class MuscleBuildingGA {
 //        System.out.println("Best result: " + bestFitness);
 //        System.out.println("Best hyperparameters: " + bestHyperparameters.toString());
 
-        runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
-                hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
-                (int) hyperParameters.get("selectionSize")[2]);
-
+        /**
+         * Currently takes around 50 seconds for the 30 runs loop -> which would
+         * equate to around 40.5 - 41 hours for the hyperparameter grid search
+         */
+        for (int i = 0; i < 30; i++) {
+            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
+                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
+                    (int) hyperParameters.get("selectionSize")[2]);
+        }
     }
 
     public static void runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
@@ -73,7 +78,8 @@ public class MuscleBuildingGA {
          */
         while (!geneticAlgorithm.isTerminationConditionMet(generation, maxGenerations)) {
             // Print the fittest individual from the population
-//            System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
+//            System.out.println("Generation: " + generation + " --> Best workout: ");
+//            population.getFittest(0).solutionToString();
 
             // Apply crossover
             population = geneticAlgorithm.uniformCrossover(population);

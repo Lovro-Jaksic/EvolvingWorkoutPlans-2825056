@@ -183,6 +183,9 @@ public class GeneticAlgorithm {
             populationFitness += calcFitness(individual);
         }
         population.setPopulationFitness(populationFitness);
+
+        //Used to check how the fitness values look like for the population
+//        System.out.println(populationFitness);
     }
 
     /**
@@ -206,8 +209,6 @@ public class GeneticAlgorithm {
      * <p>
      * Tournament selection works by choosing N random individuals
      * and then choosing the best of them
-     * <p>
-     * TODO: Implement multiple selection methods and test their performance
      *
      * @param population
      * @return
