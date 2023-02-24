@@ -18,6 +18,7 @@ public class MuscleBuildingGA {
     // Initialize the best result and its corresponding hyperparameters
     public static double bestFitness = Double.NEGATIVE_INFINITY;
     public static Map<String, Double> bestHyperparameters = new HashMap<>();
+    public static int meanIndividualScore;
 
     public static void main(String[] args) {
         // Populate the hyperparameter grid
@@ -49,11 +50,15 @@ public class MuscleBuildingGA {
          * Currently takes around 50 seconds for the 30 runs loop -> which would
          * equate to around 40.5 - 41 hours for the hyperparameter grid search
          */
-        for (int i = 0; i < 30; i++) {
-            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
-                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
-                    (int) hyperParameters.get("selectionSize")[2]);
-        }
+//        for (int i = 0; i < 30; i++) {
+//            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
+//                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
+//                    (int) hyperParameters.get("selectionSize")[2]);
+//        }
+
+        runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
+                hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
+                (int) hyperParameters.get("selectionSize")[2]);
     }
 
     public static void runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {

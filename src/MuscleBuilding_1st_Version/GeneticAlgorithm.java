@@ -71,7 +71,7 @@ public class GeneticAlgorithm {
                     // Calculate the number of exercises per body part
                     if (gene == 0) {
                         if (selectedExercises.contains(currentGene)) {
-                            fitness -= 200;
+                            fitness -= 500;
                         }
                         if (!selectedExercises.contains(currentGene)){
                             selectedExercises.add(currentGene);
@@ -95,69 +95,67 @@ public class GeneticAlgorithm {
                     } else if (gene == 1) {
                         if (workout < 3) {
                             if (currentGene == setsRepsWeek1[0]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         } else if (workout > 2 && workout < 6) {
                             if (currentGene == setsRepsWeek2[0]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         } else if (workout > 5 && workout < 9) {
                             if (currentGene == setsRepsWeek3[0]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         } else {
                             if (currentGene == setsRepsWeek4[0]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         }
                         // Calculate the fitness according to the reps and progressive overload
                     } else {
                         if (workout < 3) {
                             if (currentGene >= setsRepsWeek1[1] && currentGene <= setsRepsWeek1[2]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         } else if (workout > 2 && workout < 6) {
                             if (currentGene >= setsRepsWeek2[1] && currentGene <= setsRepsWeek2[2]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         } else if (workout > 5 && workout < 9) {
                             if (currentGene >= setsRepsWeek3[1] && currentGene <= setsRepsWeek3[2]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         } else {
                             if (currentGene >= setsRepsWeek4[1] && currentGene <= setsRepsWeek4[2]) {
-                                fitness += 100;
+                                fitness += 1000;
                             } else {
-                                fitness -= 200;
+                                fitness -= 500;
                             }
                         }
                     }
                 }
             }
             if (chestTrained > 2) {
-                fitness -= 100;
+                fitness -= 500;
             } else if (backTrained > 2) {
-                fitness -= 100;
-            } else if (legsTrained > 2) {
-                fitness -= 100;
+                fitness -= 500;
             } else if (armsShouldersTrained > 2) {
-                fitness -= 100;
+                fitness -= 500;
             } else if (coreTrained > 2) {
-                fitness -= 100;
+                fitness -= 500;
             }
         }
         individual.setFitness(fitness);
