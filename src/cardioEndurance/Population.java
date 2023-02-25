@@ -1,18 +1,16 @@
 package cardioEndurance;
 
-import MuscleBuilding_1st_Version.Individual;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
 public class Population {
-    private MuscleBuilding_1st_Version.Individual population[];
+    private Individual population[];
 
     private double populationFitness = -1;
 
     public Population(int populationSize) {
-        this.population = new MuscleBuilding_1st_Version.Individual[populationSize];
+        this.population = new Individual[populationSize];
     }
 
     /**
@@ -22,22 +20,22 @@ public class Population {
      * @param chromosomeLength
      */
     public Population(int populationSize, int chromosomeLength) {
-        this.population = new MuscleBuilding_1st_Version.Individual[populationSize];
+        this.population = new Individual[populationSize];
 
         for (int individualCount = 0; individualCount < populationSize; individualCount++) {
-            MuscleBuilding_1st_Version.Individual individual = new MuscleBuilding_1st_Version.Individual(chromosomeLength);
+            Individual individual = new Individual(chromosomeLength);
             this.population[individualCount] = individual;
         }
     }
 
-    public MuscleBuilding_1st_Version.Individual[] getIndividuals() {
+    public Individual[] getIndividuals() {
         return this.population;
     }
 
-    public MuscleBuilding_1st_Version.Individual getFittest(int position) {
-        Arrays.sort(this.population, new Comparator<MuscleBuilding_1st_Version.Individual>() {
+    public Individual getFittest(int position) {
+        Arrays.sort(this.population, new Comparator<Individual>() {
             @Override
-            public int compare(MuscleBuilding_1st_Version.Individual o1, MuscleBuilding_1st_Version.Individual o2) {
+            public int compare(Individual o1, Individual o2) {
                 if (o1.getFitness() > o2.getFitness()) {
                     return -1;
                 } else if (o1.getFitness() < o2.getFitness()) {
@@ -61,11 +59,11 @@ public class Population {
         return this.population.length;
     }
 
-    public MuscleBuilding_1st_Version.Individual setIndividual(int position, MuscleBuilding_1st_Version.Individual individual) {
+    public Individual setIndividual(int position, Individual individual) {
         return population[position] = individual;
     }
 
-    public MuscleBuilding_1st_Version.Individual getIndividual(int position) {
+    public Individual getIndividual(int position) {
         return population[position];
     }
 
