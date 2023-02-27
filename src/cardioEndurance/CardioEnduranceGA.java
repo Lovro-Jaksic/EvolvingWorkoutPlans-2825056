@@ -1,7 +1,5 @@
 package cardioEndurance;
 
-import MuscleBuilding_1st_Version.GeneticAlgorithm;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +64,7 @@ public class CardioEnduranceGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(252);
+        Population population = geneticAlgorithm.initPopulation(144);
 
         // Evaluate the population
         geneticAlgorithm.evaluatePopulation(population);

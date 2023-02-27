@@ -175,7 +175,8 @@ public class Individual {
         // A for loop to print out individual exercises and their corresponding sets and reps
         for (int i = 0; i < this.chromosome.length; i += 3) {
             System.out.print(exerciseMap.get(this.chromosome[i]) + " -->" + "Active time: " +
-                    this.chromosome[i + 1] + " Rest time: " + this.chromosome[i + 2]);
+                    this.chromosome[i + 1] + "sec Rest time: " + this.chromosome[i + 2]
+                    + " sec");
             System.out.println();
 
             if ((i + 3) % 12 == 0) {

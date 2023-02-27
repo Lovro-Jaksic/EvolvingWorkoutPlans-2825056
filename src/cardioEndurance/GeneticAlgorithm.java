@@ -41,105 +41,87 @@ public class GeneticAlgorithm {
         int fitness = 0;
 
         // Workouts per week for the beginner programme (minus 1 because the loops start at index 0)
-        int week1 = 3 - 1;
-        int week2 = 3 - 1;
-        int week3 = 4 - 1;
-        int week4 = 4 - 1;
+        int numOfWorkouts = 3 - 1;
 
-        // Sets and reps ideal goals for each week, used for progressive overload
-        int[] setsRepsWeek1 = {2, 8, 10};
-        int[] setsRepsWeek2 = {3, 8, 10};
-        int[] setsRepsWeek3 = {3, 10, 12};
-        int[] setsRepsWeek4 = {3, 12, 14};
+        // Exercise and rest time goals for each week, used for progressive overload, defined in ranges
+        // First 2 elements represent exercise time ranges, last 2 rest time ranges
+        int[] exerciseRestWeek1 = {20, 30, 20, 40};
+        int[] exerciseRestWeek2 = {25, 35, 20, 40};
+        int[] exerciseRestWeek3 = {35, 40, 15, 35};
+        int[] exerciseRestWeek4 = {35, 40, 10, 30};
 
-        // For now, 14 exercises in total across the 4 weeks for the beginner workout programme
-        for (int workout = 0; workout <= individual.getChromosomeLength() / 18; workout++) {
+        // For now, 12 workouts in total across the 4 weeks for the beginner workout programme
+        for (int workout = 0; workout <= individual.getChromosomeLength() / 12; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
             Set<Integer> selectedExercises = new HashSet<>();
-            int chestTrained = 0;
-            int backTrained = 0;
-            int legsTrained = 0;
-            int armsShouldersTrained = 0;
-            int coreTrained = 0;
 
-            for (int exercise = 0; exercise < 6; exercise++) {
+            // For loop to iterate through 4 exercises per workout
+            for (int exercise = 0; exercise < 4; exercise++) {
+                // For loop to iterate through 3 genes per exercise
                 for (int gene = 0; gene < 3; gene++) {
-                    int chromosomePosition = gene + exercise * 3 + workout * 6;
+                    int chromosomePosition = gene + exercise * 3 + workout * 4;
                     int currentGene = individual.getGene(chromosomePosition);
 
-                    // Calculate the number of exercises per body part
+                    // Check if there are any repeating exercises inside the workout
                     if (gene == 0) {
                         if (selectedExercises.contains(currentGene)) {
                             fitness -= 500;
                         }
+                        // If not, add them to the set
                         if (!selectedExercises.contains(currentGene)){
                             selectedExercises.add(currentGene);
                         }
-                        if (currentGene <= 5) {
-                            chestTrained++;
-                        }
-                        if (currentGene > 5 && currentGene <= 10) {
-                            backTrained++;
-                        }
-                        if (currentGene > 10 && currentGene <= 15) {
-                            legsTrained++;
-                        }
-                        if (currentGene > 15 && currentGene <= 20) {
-                            armsShouldersTrained++;
-                        }
-                        if (currentGene > 20 && currentGene <= 25){
-                            coreTrained++;
-                        }
-                        //Calculate the fitness according to the sets and progressive overload
+
+                        // Calculate the fitness according to the ranges for exercise times
                     } else if (gene == 1) {
                         if (workout < 3) {
-                            if (currentGene == setsRepsWeek1[0]) {
+                            if (currentGene >= exerciseRestWeek1[0] && currentGene <= exerciseRestWeek1[1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else if (workout > 2 && workout < 6) {
-                            if (currentGene == setsRepsWeek2[0]) {
+                            if (currentGene >= exerciseRestWeek2[0] && currentGene <= exerciseRestWeek2[1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else if (workout > 5 && workout < 9) {
-                            if (currentGene == setsRepsWeek3[0]) {
+                            if (currentGene >= exerciseRestWeek3[0] && currentGene <= exerciseRestWeek3[1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else {
-                            if (currentGene == setsRepsWeek4[0]) {
+                            if (currentGene >= exerciseRestWeek4[0] && currentGene <= exerciseRestWeek4[1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         }
-                        // Calculate the fitness according to the reps and progressive overload
+                        // Calculate the fitness according to the ranges for rest times
                     } else {
                         if (workout < 3) {
-                            if (currentGene >= setsRepsWeek1[1] && currentGene <= setsRepsWeek1[2]) {
+                            if (currentGene >= exerciseRestWeek1[2] && currentGene <= exerciseRestWeek1[3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else if (workout > 2 && workout < 6) {
-                            if (currentGene >= setsRepsWeek2[1] && currentGene <= setsRepsWeek2[2]) {
+                            if (currentGene >= exerciseRestWeek2[2] && currentGene <= exerciseRestWeek2[3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else if (workout > 5 && workout < 9) {
-                            if (currentGene >= setsRepsWeek3[1] && currentGene <= setsRepsWeek3[2]) {
+                            if (currentGene >= exerciseRestWeek3[2] && currentGene <= exerciseRestWeek3[3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else {
-                            if (currentGene >= setsRepsWeek4[1] && currentGene <= setsRepsWeek4[2]) {
+                            if (currentGene >= exerciseRestWeek4[2] && currentGene <= exerciseRestWeek4[3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
@@ -147,15 +129,6 @@ public class GeneticAlgorithm {
                         }
                     }
                 }
-            }
-            if (chestTrained > 2) {
-                fitness -= 500;
-            } else if (backTrained > 2) {
-                fitness -= 500;
-            } else if (armsShouldersTrained > 2) {
-                fitness -= 500;
-            } else if (coreTrained > 2) {
-                fitness -= 500;
             }
         }
         individual.setFitness(fitness);

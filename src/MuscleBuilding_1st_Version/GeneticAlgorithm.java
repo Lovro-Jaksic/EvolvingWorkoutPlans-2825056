@@ -52,7 +52,7 @@ public class GeneticAlgorithm {
         int[] setsRepsWeek3 = {3, 10, 12};
         int[] setsRepsWeek4 = {3, 12, 14};
 
-        // For now, 14 exercises in total across the 4 weeks for the beginner workout programme
+        // For now, 14 workouts in total across the 4 weeks for the beginner workout programme
         for (int workout = 0; workout <= individual.getChromosomeLength() / 18; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
@@ -63,7 +63,9 @@ public class GeneticAlgorithm {
             int armsShouldersTrained = 0;
             int coreTrained = 0;
 
+            // For loop to iterate through 6 exercises per workout
             for (int exercise = 0; exercise < 6; exercise++) {
+                // For loop to iterate through 3 genes per exercise
                 for (int gene = 0; gene < 3; gene++) {
                     int chromosomePosition = gene + exercise * 3 + workout * 6;
                     int currentGene = individual.getGene(chromosomePosition);
@@ -105,7 +107,7 @@ public class GeneticAlgorithm {
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > 5 && workout < 9) {
+                        } else if (workout > 5 && workout < 10) {
                             if (currentGene == setsRepsWeek3[0]) {
                                 fitness += 1000;
                             } else {
@@ -132,7 +134,7 @@ public class GeneticAlgorithm {
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > 5 && workout < 9) {
+                        } else if (workout > 5 && workout < 10) {
                             if (currentGene >= setsRepsWeek3[1] && currentGene <= setsRepsWeek3[2]) {
                                 fitness += 1000;
                             } else {
