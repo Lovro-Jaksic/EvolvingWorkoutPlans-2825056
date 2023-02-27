@@ -81,6 +81,46 @@ public class CardioEnduranceGA {
             "Power snatches"
     };
 
+    // Exercise and rest time goals for each week, used for progressive overload, defined in ranges for all 3 plans
+    // First 2 elements represent exercise time ranges, last 2 rest time ranges
+    static int[][] beginnerPlan = {
+            // Week 1
+            {20, 30, 20, 40},
+            // Week 2
+            {25, 35, 20, 40},
+            // Week 3
+            {35, 40, 15, 35},
+            // Week 4
+            {35, 40, 10, 30}
+    };
+
+    static int[][] intermediatePlan = {
+            // Week 1
+            {25, 35, 15, 35},
+            // Week 2
+            {35, 40, 15, 35},
+            // Week 3
+            {45, 50, 10, 30},
+            // Week 4
+            {45, 50, 10, 25}
+    };
+
+    static int[][] advancedPlan = {
+            // Week 1
+            {40, 45, 10, 30},
+            // Week 2
+            {50, 55, 10, 25},
+            // Week 3
+            {60, 65, 10, 20},
+            // Week 4
+            {60, 65, 10, 15}
+    };
+
+    // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels
+    static int [] beginnerConfig = {3, 4, 12};
+    static int [] intermediateConfig = {4, 5, 16};
+    static int [] advancedConfig = {5, 6, 20};
+
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
 
@@ -141,7 +181,7 @@ public class CardioEnduranceGA {
         Population population = geneticAlgorithm.initPopulation(144);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population);
+        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -165,7 +205,7 @@ public class CardioEnduranceGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population);
+            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
             // Increment the generation count
             generation++;

@@ -37,30 +37,20 @@ public class GeneticAlgorithm {
      * @param individual
      * @return
      */
-    public double calcFitness(Individual individual) {
+    public double calcFitness(Individual individual, int[][] userPlan, int [] userLevel) {
         int fitness = 0;
 
-        // Workouts per week for the beginner programme (minus 1 because the loops start at index 0)
-        int numOfWorkouts = 3 - 1;
-
-        // Exercise and rest time goals for each week, used for progressive overload, defined in ranges
-        // First 2 elements represent exercise time ranges, last 2 rest time ranges
-        int[] exerciseRestWeek1 = {20, 30, 20, 40};
-        int[] exerciseRestWeek2 = {25, 35, 20, 40};
-        int[] exerciseRestWeek3 = {35, 40, 15, 35};
-        int[] exerciseRestWeek4 = {35, 40, 10, 30};
-
-        // For now, 12 workouts in total across the 4 weeks for the beginner workout programme
-        for (int workout = 0; workout <= individual.getChromosomeLength() / 12; workout++) {
+        // For loop to iterate through a selected amount of workouts (12, 16, or 20)
+        for (int workout = 0; workout <= individual.getChromosomeLength() / userLevel[2]; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
             Set<Integer> selectedExercises = new HashSet<>();
 
-            // For loop to iterate through 4 exercises per workout
-            for (int exercise = 0; exercise < 4; exercise++) {
+            // For loop to iterate through all the exercises per workout (4, 5, 6)
+            for (int exercise = 0; exercise < userLevel[1]; exercise++) {
                 // For loop to iterate through 3 genes per exercise
                 for (int gene = 0; gene < 3; gene++) {
-                    int chromosomePosition = gene + exercise * 3 + workout * 4;
+                    int chromosomePosition = gene + exercise * 3 + workout * userLevel[1];
                     int currentGene = individual.getGene(chromosomePosition);
 
                     // Check if there are any repeating exercises inside the workout
@@ -75,26 +65,26 @@ public class GeneticAlgorithm {
 
                         // Calculate the fitness according to the ranges for exercise times
                     } else if (gene == 1) {
-                        if (workout < 3) {
-                            if (currentGene >= exerciseRestWeek1[0] && currentGene <= exerciseRestWeek1[1]) {
+                        if (workout < userLevel[2] / 4) {
+                            if (currentGene >= userPlan[0][0] && currentGene <= userPlan[0][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > 2 && workout < 6) {
-                            if (currentGene >= exerciseRestWeek2[0] && currentGene <= exerciseRestWeek2[1]) {
+                        } else if (workout > (userLevel[2] / 4) - 1 && workout < (userLevel[2] / 4) * 2) {
+                            if (currentGene >= userPlan[1][0] && currentGene <= userPlan[1][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > 5 && workout < 9) {
-                            if (currentGene >= exerciseRestWeek3[0] && currentGene <= exerciseRestWeek3[1]) {
+                        } else if (workout > ((userLevel[2] / 4) * 2) - 1 && workout < (userLevel[2] / 4) * 3) {
+                            if (currentGene >= userPlan[2][0] && currentGene <= userPlan[2][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else {
-                            if (currentGene >= exerciseRestWeek4[0] && currentGene <= exerciseRestWeek4[1]) {
+                            if (currentGene >= userPlan[3][0] && currentGene <= userPlan[3][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
@@ -102,26 +92,26 @@ public class GeneticAlgorithm {
                         }
                         // Calculate the fitness according to the ranges for rest times
                     } else {
-                        if (workout < 3) {
-                            if (currentGene >= exerciseRestWeek1[2] && currentGene <= exerciseRestWeek1[3]) {
+                        if (workout < userLevel[2] / 4) {
+                            if (currentGene >= userPlan[0][2] && currentGene <= userPlan[0][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > 2 && workout < 6) {
-                            if (currentGene >= exerciseRestWeek2[2] && currentGene <= exerciseRestWeek2[3]) {
+                        } else if (workout > (userLevel[2] / 4) - 1 && workout < (userLevel[2] / 4) * 2) {
+                            if (currentGene >= userPlan[1][2] && currentGene <= userPlan[1][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > 5 && workout < 9) {
-                            if (currentGene >= exerciseRestWeek3[2] && currentGene <= exerciseRestWeek3[3]) {
+                        } else if (workout > ((userLevel[2] / 4) * 2) - 1 && workout < (userLevel[2] / 4) * 3) {
+                            if (currentGene >= userPlan[2][2] && currentGene <= userPlan[2][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else {
-                            if (currentGene >= exerciseRestWeek4[2] && currentGene <= exerciseRestWeek4[3]) {
+                            if (currentGene >= userPlan[3][2] && currentGene <= userPlan[3][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
@@ -147,11 +137,11 @@ public class GeneticAlgorithm {
      *
      * @param population
      */
-    public void evaluatePopulation(Population population) {
+    public void evaluatePopulation(Population population, int[][] userPlan, int [] userLevel) {
         double populationFitness = 0;
 
         for (Individual individual : population.getIndividuals()) {
-            populationFitness += calcFitness(individual);
+            populationFitness += calcFitness(individual, userPlan, userLevel);
         }
         population.setPopulationFitness(populationFitness);
 
