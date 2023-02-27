@@ -7,81 +7,6 @@ public class Individual {
     private int [] chromosome;
     private double fitness = -1;
 
-    // Array to store all the available exercises for beginner users (currently 20)
-    String[] beginnerHIITExercises = {
-            "Jumping Jacks",
-            "High Knees",
-            "Butt Kicks",
-            "Jump Rope",
-            "Plank Jacks",
-            "Pushups",
-            "Mountain Climbers",
-            "Skater Jumps",
-            "Jump Squats",
-            "Bear Crawls",
-            "Burpees",
-            "Alternating Lunges",
-            "Box Jumps",
-            "Tricep Dips",
-            "Side Plank",
-            "Dumbbell Thrusters",
-            "Renegade Rows",
-            "Russian Twists",
-            "Medicine Ball Slams",
-            "Battle Ropes"
-    };
-
-
-    // Array to store all the available exercises for intermediate users (currently 20)
-    String[] intermediateHIITExercises = {
-            "Box jumps",
-            "Battle ropes swings",
-            "Jumping lunges",
-            "Kettlebell swings",
-            "Mountain climbers",
-            "Plank jacks",
-            "Burpees",
-            "Jump squats",
-            "Rowing machine sprints",
-            "Medicine ball slams",
-            "Bike sprints",
-            "Jumping jacks",
-            "High knees",
-            "Jump rope",
-            "Dumbbell thrusters",
-            "Russian twists",
-            "Treadmill sprints",
-            "TRX pushups",
-            "Sled pushes",
-            "TRX rowing"
-    };
-
-
-    // Array to store all the available exercises for advanced users (currently 20)
-    String[] advancedHIITExercises = {
-            "Burpee box jumps",
-            "Battle ropes",
-            "Jumping lunges",
-            "Plyometric push-ups",
-            "Kettlebell swings",
-            "Medicine ball slams",
-            "Sled pushes",
-            "Rowing sprints",
-            "Boxing bag drills",
-            "Squat jumps with overhead press",
-            "Sprint intervals on the treadmill",
-            "Jump rope double unders",
-            "Bear crawl with push-up",
-            "Turkish get-ups",
-            "Treadmill sprints",
-            "Wall balls",
-            "Assault bike sprints",
-            "Broad jumps",
-            "Barbell thrusters",
-            "Power snatches"
-    };
-
-
     /**
      * A constructor for the individual with a specific chromosome
      * @param chromosome - The individual's chromosome
@@ -156,7 +81,7 @@ public class Individual {
      * A method to output the solution in a more readable format with
      * words, and not an int chromosome
      */
-    public void solutionToString() {
+    public void solutionToString(String[] exercises) {
         // A hashmap to store the exercise IDs and the names of the exercises as values
         HashMap<Integer, String> exerciseMap = new HashMap<>();
 
@@ -164,8 +89,8 @@ public class Individual {
         int counter = 1;
 
         // Populate the hashmap with exercise IDs and exercise names
-        for (int i = 0; i < beginnerHIITExercises.length; i++) {
-            exerciseMap.put(i + 1, beginnerHIITExercises[i]);
+        for (int i = 0; i < exercises.length; i++) {
+            exerciseMap.put(i + 1, exercises[i]);
         }
 
         System.out.println("<-------------------------------------------------------" +

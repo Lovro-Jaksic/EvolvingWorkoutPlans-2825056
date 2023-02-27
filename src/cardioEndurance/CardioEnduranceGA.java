@@ -7,6 +7,80 @@ import java.util.Map;
  * Main class used for running the algorithm
  */
 public class CardioEnduranceGA {
+    // Array to store all the available exercises for beginner users (currently 20)
+    static String[] beginnerHIITExercises = {
+            "Jumping Jacks",
+            "High Knees",
+            "Butt Kicks",
+            "Jump Rope",
+            "Plank Jacks",
+            "Pushups",
+            "Mountain Climbers",
+            "Skater Jumps",
+            "Jump Squats",
+            "Bear Crawls",
+            "Burpees",
+            "Alternating Lunges",
+            "Box Jumps",
+            "Tricep Dips",
+            "Side Plank",
+            "Dumbbell Thrusters",
+            "Renegade Rows",
+            "Russian Twists",
+            "Medicine Ball Slams",
+            "Battle Ropes"
+    };
+
+
+    // Array to store all the available exercises for intermediate users (currently 20)
+    static String[] intermediateHIITExercises = {
+            "Box jumps",
+            "Battle ropes swings",
+            "Jumping lunges",
+            "Kettlebell swings",
+            "Mountain climbers",
+            "Plank jacks",
+            "Burpees",
+            "Jump squats",
+            "Rowing machine sprints",
+            "Medicine ball slams",
+            "Bike sprints",
+            "Jumping jacks",
+            "High knees",
+            "Jump rope",
+            "Dumbbell thrusters",
+            "Russian twists",
+            "Treadmill sprints",
+            "TRX pushups",
+            "Sled pushes",
+            "TRX rowing"
+    };
+
+
+    // Array to store all the available exercises for advanced users (currently 20)
+    static String[] advancedHIITExercises = {
+            "Burpee box jumps",
+            "Battle ropes",
+            "Jumping lunges",
+            "Plyometric push-ups",
+            "Kettlebell swings",
+            "Medicine ball slams",
+            "Sled pushes",
+            "Rowing sprints",
+            "Boxing bag drills",
+            "Squat jumps with overhead press",
+            "Sprint intervals on the treadmill",
+            "Jump rope double unders",
+            "Bear crawl with push-up",
+            "Turkish get-ups",
+            "Treadmill sprints",
+            "Wall balls",
+            "Assault bike sprints",
+            "Broad jumps",
+            "Barbell thrusters",
+            "Power snatches"
+    };
+
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
 
@@ -114,7 +188,7 @@ public class CardioEnduranceGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString();
+        solution.solutionToString(beginnerHIITExercises);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 

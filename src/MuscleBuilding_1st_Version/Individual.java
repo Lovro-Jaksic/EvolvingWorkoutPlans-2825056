@@ -7,108 +7,6 @@ public class Individual {
     private int [] chromosome;
     private double fitness = -1;
 
-    // Array to store all the available exercises (currently 25)
-    String [] beginnerExercises = {
-            // Chest
-            "Push-ups",
-            "Dumbbell Bench Press",
-            "Dumbbell Flys",
-            "Cable Crossovers",
-            "Incline Dumbbell Bench Press",
-            // Back
-            "Lat Pull-downs",
-            "Seated Cable Rows",
-            "Assisted Pullups",
-            "Dumbbell Shrugs",
-            "Chest Supported Dumbbell Rows",
-            // Legs
-            "Walking Lunges",
-            "Body-weight Squats",
-            "Leg Press",
-            "Glute Bridge",
-            "Standing Calf Raises",
-            // Arms & Shoulders
-            "Bicep Curls with Dumbbells",
-            "Dumbbell Lateral Raises",
-            "Dumbbell Overhead Press",
-            "Dumbbell Front Raises",
-            "Resistance Band Face Pulls",
-            // Core
-            "Crunches",
-            "Russian Twists",
-            "Mountain Climbers",
-            "Lying Leg Raises",
-            "Dead Bug"
-    };
-
-    // Array to store all the available exercises (currently 25)
-    String [] intermediateExercises = {
-            // Chest
-            "Dumbbell Bench Press with Resistance Bands",
-            "Dips",
-            "Incline Dumbbell Flys",
-            "Resistance Band Pushups",
-            "Cable Flys",
-            // Back
-            "Pullups",
-            "Chinups",
-            "Barbell Deadlifts",
-            "Bent Over Dumbbell Rows",
-            "Hyperextensions",
-            // Legs
-            "Hamstring Curls",
-            "Dumbell Squats",
-            "Weighted Step Ups",
-            "Dumbbell Lunges",
-            "Box Jumps",
-            // Arms & Shoulders
-            "Tricep Dips",
-            "Barbell Bicep Curls",
-            "Dumbbell Upright Rows",
-            "Barbell Standing Press",
-            "Dumbbell Hammer Curls",
-            // Core
-            "Russian Twists with a dumbbell",
-            "Decline Situps",
-            "Cable Woodchoppers",
-            "Farmer's Carry with kettlebells",
-            "Medicine Ball Slams"
-    };
-
-    // Array to store all the available exercises (currently 25)
-    String [] advancedExercises = {
-            // Chest
-            "Plyometric Pushup",
-            "Weighted Dips",
-            "Decline Dumbbell Bench Press",
-            "Band Resisted Dumbbell Flys",
-            "Dumbbell Bench Press with chains and bands",
-            // Back
-            "T-Bar Rows",
-            "Dumbbell Deadlifts",
-            "Renegade Row",
-            "Inverted Row",
-            "Weighted Pullups",
-            // Legs
-            "Bulgarian Split Squats with Dumbbells",
-            "Barbell Glute Bridges",
-            "Barbell Front Squats",
-            "Barbell Back Squats",
-            "Goblet Squats with a Dumbbell",
-            // Arms & Shoulders
-            "Close Grip Benchpress",
-            "Arnold Dumbbell Press",
-            "Kettlebell Single-Arm Press",
-            "Dumbbell Skull Crushers",
-            "Dumbbell Single-Arm Preacher Curls",
-            // Core
-            "Hanging Leg Raises",
-            "Ab-Wheel Rollout",
-            "Medicine Ball V-Ups",
-            "Swiss Ball Jacknife",
-            "Swiss Ball Pike"
-    };
-
     /**
      * A constructor for the individual with a specific chromosome
      * @param chromosome - The individual's chromosome
@@ -183,7 +81,7 @@ public class Individual {
      * A method to output the solution in a more readable format with
      * words, and not an int chromosome
      */
-    public void solutionToString() {
+    public void solutionToString(String[] exercises) {
         // A hashmap to store the exercise IDs and the names of the exercises as values
         HashMap<Integer, String> exerciseMap = new HashMap<>();
 
@@ -191,8 +89,8 @@ public class Individual {
         int counter = 1;
 
         // Populate the hashmap with exercise IDs and exercise names
-        for (int i = 0; i < beginnerExercises.length; i++) {
-            exerciseMap.put(i + 1, beginnerExercises[i]);
+        for (int i = 0; i < exercises.length; i++) {
+            exerciseMap.put(i + 1, exercises[i]);
         }
 
         System.out.println("<-------------------------------------------------------" +
