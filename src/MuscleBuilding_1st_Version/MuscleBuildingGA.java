@@ -111,6 +111,49 @@ public class MuscleBuildingGA {
             "Swiss Ball Pike"
     };
 
+    // Sets and reps goals for each week, used for progressive overload, defined in ranges for all 3 plans
+    // 1st element represents sets, 2nd and 3rd elements represent target rep ranges
+    static int[][] beginnerPlan = {
+            // Week 1
+            {2, 8, 10},
+            // Week 2
+            {3, 8, 10},
+            // Week 3
+            {3, 10, 12},
+            // Week 4
+            {3, 12, 14}
+    };
+
+    static int[][] intermediatePlan = {
+            // Week 1
+            {3, 10, 12},
+            // Week 2
+            {3, 12, 14},
+            // Week 3
+            {4, 10, 12},
+            // Week 4
+            {4, 12, 14}
+    };
+
+    static int[][] advancedPlan = {
+            // Week 1
+            {4, 10, 12},
+            // Week 2
+            {4, 10, 12},
+            // Week 3
+            {4, 12, 14},
+            // Week 4
+            {4, 12, 14}
+    };
+
+    /**
+     * First 4 elements represent workout per week - 5th element represents exercises per workout
+     * 6th element represents total workouts in the 4 weeks - 7th element the total number of genes in the chromosome
+     */
+    static int [] beginnerConfig = {3, 3, 4, 4, 4, 14, 168};
+    static int [] intermediateConfig = {4, 4, 5, 5, 5, 18, 270};
+    static int [] advancedConfig = {5, 5, 6, 6, 6, 22, 396};
+
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
 
@@ -168,10 +211,10 @@ public class MuscleBuildingGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(252);
+        Population population = geneticAlgorithm.initPopulation(beginnerConfig[6]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population);
+        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -195,7 +238,7 @@ public class MuscleBuildingGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population);
+            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
             // Increment the generation count
             generation++;
@@ -218,7 +261,7 @@ public class MuscleBuildingGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString(beginnerExercises);
+        solution.solutionToString(beginnerExercises, beginnerConfig);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 

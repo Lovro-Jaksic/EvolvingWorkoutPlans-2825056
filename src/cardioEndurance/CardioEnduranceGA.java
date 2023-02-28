@@ -117,9 +117,9 @@ public class CardioEnduranceGA {
     };
 
     // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels
-    static int [] beginnerConfig = {3, 4, 12};
-    static int [] intermediateConfig = {4, 5, 16};
-    static int [] advancedConfig = {5, 6, 20};
+    static int [] beginnerConfig = {3, 4, 12, 144};
+    static int [] intermediateConfig = {4, 5, 16, 240};
+    static int [] advancedConfig = {5, 6, 20, 360};
 
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
@@ -178,7 +178,7 @@ public class CardioEnduranceGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(144);
+        Population population = geneticAlgorithm.initPopulation(advancedConfig[3]);
 
         // Evaluate the population
         geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
@@ -228,7 +228,7 @@ public class CardioEnduranceGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString(beginnerHIITExercises);
+        solution.solutionToString(advancedHIITExercises,advancedConfig);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 

@@ -81,7 +81,7 @@ public class Individual {
      * A method to output the solution in a more readable format with
      * words, and not an int chromosome
      */
-    public void solutionToString(String[] exercises) {
+    public void solutionToString(String[] exercises, int [] userConfig) {
         // A hashmap to store the exercise IDs and the names of the exercises as values
         HashMap<Integer, String> exerciseMap = new HashMap<>();
 
@@ -103,7 +103,7 @@ public class Individual {
                     this.chromosome[i + 1] + " Reps: " + this.chromosome[i + 2]);
             System.out.println();
 
-            if ((i + 3) % 18 == 0) {
+            if ((i + 3) % (userConfig[4] * 3) == 0) {
                 System.out.println("<---------------------------------------- Workout " +
                         counter + " ---------------------------------------->");
                 counter++;

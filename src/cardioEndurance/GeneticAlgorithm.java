@@ -37,7 +37,7 @@ public class GeneticAlgorithm {
      * @param individual
      * @return
      */
-    public double calcFitness(Individual individual, int[][] userPlan, int [] userLevel) {
+    public double calcFitness(Individual individual, int[][] userPlan, int[] userLevel) {
         int fitness = 0;
 
         // For loop to iterate through a selected amount of workouts (12, 16, or 20)
