@@ -1,4 +1,4 @@
-package MuscleBuilding_1st_Version;
+package cardioEndurance;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -18,8 +18,8 @@ public class Individual {
     /**
      * A constructor that will initialize a random set of exercises for the 4-week programme
      *
-     * In total there will be 252 genes to fit all the required criteria for the beginner plan (14 workouts *
-     * 6 exercises per workout * 3 genes per exercise (exerciseID, sets, reps))
+     * In total there will be 144 genes to fit all the required criteria for the beginner plan (12 workouts *
+     * 4 exercises per workout * 3 genes per exercise (exerciseID, active time, rest time))
      *
      * Ranges for randomisation depend on the gene position
      *
@@ -32,14 +32,14 @@ public class Individual {
             Random random = new Random();
             int randomNumber;
             if (gene % 3 == 0) {
-                // generate random number between 1 and 25 for index 0, 3, 6, 9, etc.
-                randomNumber = random.nextInt(25) + 1;
+                // generate random number between 1 and 20 for index 0, 3, 6, 9, etc.
+                randomNumber = random.nextInt(20) + 1;
             } else if (gene % 3 == 1) {
-                // generate random number between 2 and 4 for index 1, 4, 7, 10, etc.
-                randomNumber = random.nextInt(3) + 2;
+                // generate random number between 20 and 60 for index 1, 4, 7, 10, etc.
+                randomNumber = random.nextInt(41) + 20;
             } else {
-                // generate random number between 8 and 14 for index 2, 5, 8, 11, etc.
-                randomNumber = random.nextInt(9) + 6;
+                // generate random number between 10 and 30 for index 2, 5, 8, 11, etc.
+                randomNumber = random.nextInt(21) + 10;
             }
             this.setGene(gene, randomNumber);
         }
@@ -81,7 +81,7 @@ public class Individual {
      * A method to output the solution in a more readable format with
      * words, and not an int chromosome
      */
-    public void solutionToString(String[] exercises, int [] userConfig) {
+    public void solutionToString(String[] exercises, int[] userConfig) {
         // A hashmap to store the exercise IDs and the names of the exercises as values
         HashMap<Integer, String> exerciseMap = new HashMap<>();
 
@@ -94,16 +94,17 @@ public class Individual {
         }
 
         System.out.println("<-------------------------------------------------------" +
-                " Optimized Workout Schedule " +
+                " Optimized Cardio Endurance Schedule " +
                 " ------------------------------------------------------->");
 
-        // A for loop to print out individual exercises and their corresponding sets and reps
+        // A for loop to print out individual exercises and their corresponding active and rest times
         for (int i = 0; i < this.chromosome.length; i += 3) {
-            System.out.print(exerciseMap.get(this.chromosome[i]) + " -->" + " Sets: " +
-                    this.chromosome[i + 1] + " Reps: " + this.chromosome[i + 2]);
+            System.out.print(exerciseMap.get(this.chromosome[i]) + " -->" + " Active time: " +
+                    this.chromosome[i + 1] + "sec Rest time: " + this.chromosome[i + 2]
+                    + " sec");
             System.out.println();
 
-            if ((i + 3) % (userConfig[4] * 3) == 0) {
+            if ((i + 3) % (userConfig[1] * 3) == 0) {
                 System.out.println("<---------------------------------------- Workout " +
                         counter + " ---------------------------------------->");
                 counter++;

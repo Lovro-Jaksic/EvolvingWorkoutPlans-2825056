@@ -1,4 +1,4 @@
-package MuscleBuilding_1st_Version;
+package cardioEndurance;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -32,7 +32,7 @@ public class GeneticAlgorithm {
      *
      * (sets and reps and later more difficult exercises)
      *
-     * TODO: For some reason, the workouts begin well then the performance drops significantly after a couple of workouts
+     * TODO: Implement the fitness function so that it relates to the cardio endurance programme
      *
      * @param individual
      * @return
@@ -40,32 +40,26 @@ public class GeneticAlgorithm {
     public double calcFitness(Individual individual, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
 
-        // For loop to iterate through a selected amount of workouts (14, 18, or 22)
-        for (int workout = 0; workout <= individual.getChromosomeLength() / userConfig[5]; workout++) {
+        // For loop to iterate through a selected amount of workouts (12, 16, or 20)
+        for (int workout = 0; workout <= individual.getChromosomeLength() / userConfig[2]; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
             Set<Integer> selectedExercises = new HashSet<>();
-            int chestTrained = 0;
-            int backTrained = 0;
-            int legsTrained = 0;
-            int armsShouldersTrained = 0;
-            int coreTrained = 0;
 
-            int totalSets = 0;
-            int totalReps = 0;
-            int averageNumOfSets = 0;
-            int averageNumOfReps = 0;
+            int totalActiveTime = 0;
+            int totalRestTime = 0;
+            int averageActiveTime = 0;
+            int averageRestTime = 0;
 
             // For loop to iterate through all the exercises per workout (4, 5, 6)
-            for (int exercise = 0; exercise < userConfig[4]; exercise++) {
+            for (int exercise = 0; exercise < userConfig[1]; exercise++) {
                 // For loop to iterate through 3 genes per exercise
                 for (int gene = 0; gene < 3; gene++) {
-                    int chromosomePosition = gene + exercise * 3 + workout * userConfig[4];
+                    int chromosomePosition = gene + exercise * 3 + workout * userConfig[1];
                     int currentGene = individual.getGene(chromosomePosition);
 
-                    // Calculate the number of exercises per body part
+                    // Check if there are any repeating exercises inside the workout
                     if (gene == 0) {
-                        // Check if there are any repeating exercises inside the workout and decrement the fitness
                         if (selectedExercises.contains(currentGene)) {
                             fitness -= 500;
                         }
@@ -73,74 +67,60 @@ public class GeneticAlgorithm {
                         if (!selectedExercises.contains(currentGene)){
                             selectedExercises.add(currentGene);
                         }
-                        if (currentGene <= 5) {
-                            chestTrained++;
-                        }
-                        if (currentGene > 5 && currentGene <= 10) {
-                            backTrained++;
-                        }
-                        if (currentGene > 10 && currentGene <= 15) {
-                            legsTrained++;
-                        }
-                        if (currentGene > 15 && currentGene <= 20) {
-                            armsShouldersTrained++;
-                        }
-                        if (currentGene > 20 && currentGene <= 25){
-                            coreTrained++;
-                        }
-                        //Calculate the fitness according to the sets and progressive overload
+
+                        // Calculate the fitness according to the ranges for exercise times
                     } else if (gene == 1) {
-                        totalSets += currentGene;
+                        totalActiveTime += currentGene;
 
-                        if (workout < userConfig[0]) {
-                            if (currentGene == userPlan[0][0]) {
+                        if (workout < userConfig[2] / 4) {
+                            if (currentGene >= userPlan[0][0] && currentGene <= userPlan[0][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
-                            if (currentGene == userPlan[1][0]) {
+                        } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
+                            if (currentGene >= userPlan[1][0] && currentGene <= userPlan[1][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
-                            if (currentGene == userPlan[2][0]) {
+                        } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
+                            if (currentGene >= userPlan[2][0] && currentGene <= userPlan[2][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else {
-                            if (currentGene == userPlan[3][0]) {
+                            if (currentGene >= userPlan[3][0] && currentGene <= userPlan[3][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         }
-                        // Calculate the fitness according to the reps and progressive overload
+                        // Calculate the fitness according to the ranges for rest times
                     } else {
-                        totalReps += currentGene;
+                        totalRestTime += currentGene;
 
-                        if (workout < userConfig[0]) {
-                            if (currentGene >= userPlan[0][1] && currentGene <= userPlan[0][2]) {
+                        if (workout < userConfig[2] / 4) {
+                            if (currentGene >= userPlan[0][2] && currentGene <= userPlan[0][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
-                            if (currentGene >= userPlan[1][1] && currentGene <= userPlan[1][2]) {
+                        } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
+                            if (currentGene >= userPlan[1][2] && currentGene <= userPlan[1][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
-                            if (currentGene >= userPlan[2][1] && currentGene <= userPlan[2][2]) {
+                        } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
+                            if (currentGene >= userPlan[2][2] && currentGene <= userPlan[2][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
                         } else {
-                            if (currentGene >= userPlan[3][1] && currentGene <= userPlan[3][2]) {
+                            if (currentGene >= userPlan[3][2] && currentGene <= userPlan[3][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
@@ -149,88 +129,93 @@ public class GeneticAlgorithm {
                     }
                 }
             }
+            averageActiveTime = totalActiveTime / userConfig[1];
+            averageRestTime = totalRestTime / userConfig[1];
 
-            averageNumOfSets = totalSets / userConfig[4];
-            averageNumOfReps = totalReps / userConfig[4];
-
-            // Fitness calculations for the average number of sets in a workout
-            if (workout < userConfig[0]) {
-                if (averageNumOfSets != userPlan[0][0]) {
-                    fitness -= Math.abs(userPlan[0][0] - averageNumOfSets) * 200;
-                } else {
-                    fitness += 1000;
-                }
-            } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
-                if (averageNumOfSets != userPlan[1][0]) {
-                    fitness -= Math.abs(userPlan[1][0] - averageNumOfSets) * 200;
-                } else {
-                    fitness += 1000;
-                }
-            } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
-                if (averageNumOfSets != userPlan[2][0]) {
-                    fitness -= Math.abs(userPlan[2][0] - averageNumOfSets) * 200;
-                } else {
-                    fitness += 1000;
-                }
-            } else {
-                if (averageNumOfSets != userPlan[3][0]) {
-                    fitness -= Math.abs(userPlan[3][0] - averageNumOfSets) * 200;
-                } else {
-                    fitness += 1000;
-                }
-            }
-
-            // Fitness calculations for the average number of reps in a workout
-            if (workout < userConfig[0]) {
-                if (averageNumOfReps >= userPlan[0][1] && averageNumOfReps <= userPlan[0][2]) {
+            // Fitness calculations for the average active time in a single workout
+            if (workout < userConfig[2] / 4) {
+                if (averageActiveTime >= userPlan[0][0] && averageActiveTime <= userPlan[0][1]) {
                     fitness += 1000;
                 } else {
-                    if (averageNumOfReps < userPlan[0][1]) {
-                        fitness -= Math.abs(userPlan[0][1] - averageNumOfReps) * 200;
+                    if (averageActiveTime < userPlan[0][0]) {
+                        fitness -= Math.abs(userPlan[0][0] - averageActiveTime) * 200;
                     } else {
-                        fitness -= Math.abs(userPlan[0][2] - averageNumOfReps) * 200;
+                        fitness -= Math.abs(userPlan[0][1] - averageActiveTime) * 200;
                     }
                 }
-            } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
-                if (averageNumOfReps >= userPlan[1][1] && averageNumOfReps <= userPlan[1][2]) {
+            } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
+                if (averageActiveTime >= userPlan[1][0] && averageActiveTime <= userPlan[1][1]) {
                     fitness += 1000;
                 } else {
-                    if (averageNumOfReps < userPlan[1][1]) {
-                        fitness -= Math.abs(userPlan[1][1] - averageNumOfReps) * 200;
+                    if (averageActiveTime < userPlan[1][0]) {
+                        fitness -= Math.abs(userPlan[1][0] - averageActiveTime) * 200;
                     } else {
-                        fitness -= Math.abs(userPlan[1][2] - averageNumOfReps) * 200;
+                        fitness -= Math.abs(userPlan[1][1] - averageActiveTime) * 200;
                     }
                 }
-            } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
-                if (averageNumOfReps >= userPlan[2][1] && averageNumOfReps <= userPlan[2][2]) {
+            } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
+                if (averageActiveTime >= userPlan[2][0] && averageActiveTime <= userPlan[2][1]) {
                     fitness += 1000;
                 } else {
-                    if (averageNumOfReps < userPlan[2][1]) {
-                        fitness -= Math.abs(userPlan[2][1] - averageNumOfReps) * 200;
+                    if (averageActiveTime < userPlan[2][0]) {
+                        fitness -= Math.abs(userPlan[2][0] - averageActiveTime) * 200;
                     } else {
-                        fitness -= Math.abs(userPlan[2][2] - averageNumOfReps) * 200;
+                        fitness -= Math.abs(userPlan[2][1] - averageActiveTime) * 200;
                     }
                 }
             } else {
-                if (averageNumOfReps >= userPlan[3][1] && averageNumOfReps <= userPlan[3][2]) {
+                if (averageActiveTime >= userPlan[3][0] && averageActiveTime <= userPlan[3][1]) {
                     fitness += 1000;
                 } else {
-                    if (averageNumOfReps < userPlan[3][1]) {
-                        fitness -= Math.abs(userPlan[3][1] - averageNumOfReps) * 200;
+                    if (averageActiveTime < userPlan[3][0]) {
+                        fitness -= Math.abs(userPlan[3][0] - averageActiveTime) * 200;
                     } else {
-                        fitness -= Math.abs(userPlan[3][2] - averageNumOfReps) * 200;
+                        fitness -= Math.abs(userPlan[3][1] - averageActiveTime) * 200;
                     }
                 }
             }
 
-            if (chestTrained > 2) {
-                fitness -= 500;
-            } else if (backTrained > 2) {
-                fitness -= 500;
-            } else if (armsShouldersTrained > 2) {
-                fitness -= 500;
-            } else if (coreTrained > 2) {
-                fitness -= 500;
+            // Fitness calculations for the average rest time in a single workout
+            if (workout < userConfig[2] / 4) {
+                if (averageRestTime >= userPlan[0][2] && averageRestTime <= userPlan[0][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[0][2]) {
+                        fitness -= Math.abs(userPlan[0][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[0][3] - averageRestTime) * 200;
+                    }
+                }
+            } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
+                if (averageRestTime >= userPlan[1][2] && averageRestTime <= userPlan[1][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[1][2]) {
+                        fitness -= Math.abs(userPlan[1][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[1][2] - averageRestTime) * 200;
+                    }
+                }
+            } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
+                if (averageRestTime >= userPlan[2][2] && averageRestTime <= userPlan[2][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[2][2]) {
+                        fitness -= Math.abs(userPlan[2][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[2][3] - averageRestTime) * 200;
+                    }
+                }
+            } else {
+                if (averageRestTime >= userPlan[3][2] && averageRestTime <= userPlan[3][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[3][2]) {
+                        fitness -= Math.abs(userPlan[3][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[3][3] - averageRestTime) * 200;
+                    }
+                }
             }
         }
         individual.setFitness(fitness);
@@ -715,11 +700,11 @@ public class GeneticAlgorithm {
 
                         // Keep track of the different mutations for exercises, sets, and reps
                         if (positionTracker == 0) {
-                            newGene = random.nextInt(25) + 1;
+                            newGene = random.nextInt(20) + 1;
                         } else if (positionTracker == 1) {
-                            newGene = random.nextInt(3) + 3;
+                            newGene = random.nextInt(41) + 20;
                         } else {
-                            newGene = random.nextInt(3) + 10;
+                            newGene = random.nextInt(21) + 10;
                         }
                         // Mutate the specific gene of the individual
                         individual.setGene(geneIndex, newGene);

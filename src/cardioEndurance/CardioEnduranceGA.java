@@ -1,4 +1,4 @@
-package MuscleBuilding_1st_Version;
+package cardioEndurance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,153 +6,118 @@ import java.util.Map;
 /**
  * Main class used for running the algorithm
  */
-
-public class MuscleBuildingGA {
-
-    // Array to store all the available beginner exercises (currently 25)
-    static String [] beginnerExercises = {
-            // Chest
-            "Push-ups",
-            "Dumbbell Bench Press",
-            "Dumbbell Flys",
-            "Cable Crossovers",
-            "Incline Dumbbell Bench Press",
-            // Back
-            "Lat Pull-downs",
-            "Seated Cable Rows",
-            "Assisted Pullups",
-            "Dumbbell Shrugs",
-            "Chest Supported Dumbbell Rows",
-            // Legs
-            "Walking Lunges",
-            "Body-weight Squats",
-            "Leg Press",
-            "Glute Bridge",
-            "Standing Calf Raises",
-            // Arms & Shoulders
-            "Bicep Curls with Dumbbells",
-            "Dumbbell Lateral Raises",
-            "Dumbbell Overhead Press",
-            "Dumbbell Front Raises",
-            "Resistance Band Face Pulls",
-            // Core
-            "Crunches",
-            "Russian Twists",
+public class CardioEnduranceGA {
+    // Array to store all the available exercises for beginner users (currently 20)
+    static String[] beginnerHIITExercises = {
+            "Jumping Jacks",
+            "High Knees",
+            "Butt Kicks",
+            "Jump Rope",
+            "Plank Jacks",
+            "Pushups",
             "Mountain Climbers",
-            "Lying Leg Raises",
-            "Dead Bug"
-    };
-
-    // Array to store all the available intermediate exercises (currently 25)
-    static String [] intermediateExercises = {
-            // Chest
-            "Dumbbell Bench Press with Resistance Bands",
-            "Dips",
-            "Incline Dumbbell Flys",
-            "Resistance Band Pushups",
-            "Cable Flys",
-            // Back
-            "Pullups",
-            "Chinups",
-            "Barbell Deadlifts",
-            "Bent Over Dumbbell Rows",
-            "Hyperextensions",
-            // Legs
-            "Hamstring Curls",
-            "Dumbell Squats",
-            "Weighted Step Ups",
-            "Dumbbell Lunges",
+            "Skater Jumps",
+            "Jump Squats",
+            "Bear Crawls",
+            "Burpees",
+            "Alternating Lunges",
             "Box Jumps",
-            // Arms & Shoulders
             "Tricep Dips",
-            "Barbell Bicep Curls",
-            "Dumbbell Upright Rows",
-            "Barbell Standing Press",
-            "Dumbbell Hammer Curls",
-            // Core
-            "Russian Twists with a dumbbell",
-            "Decline Situps",
-            "Cable Woodchoppers",
-            "Farmer's Carry with kettlebells",
-            "Medicine Ball Slams"
+            "Side Plank",
+            "Dumbbell Thrusters",
+            "Renegade Rows",
+            "Russian Twists",
+            "Medicine Ball Slams",
+            "Battle Ropes"
     };
 
-    // Array to store all the available advanced exercises (currently 25)
-    static String [] advancedExercises = {
-            // Chest
-            "Plyometric Pushup",
-            "Weighted Dips",
-            "Decline Dumbbell Bench Press",
-            "Band Resisted Dumbbell Flys",
-            "Dumbbell Bench Press with chains and bands",
-            // Back
-            "T-Bar Rows",
-            "Dumbbell Deadlifts",
-            "Renegade Row",
-            "Inverted Row",
-            "Weighted Pullups",
-            // Legs
-            "Bulgarian Split Squats with Dumbbells",
-            "Barbell Glute Bridges",
-            "Barbell Front Squats",
-            "Barbell Back Squats",
-            "Goblet Squats with a Dumbbell",
-            // Arms & Shoulders
-            "Close Grip Benchpress",
-            "Arnold Dumbbell Press",
-            "Kettlebell Single-Arm Press",
-            "Dumbbell Skull Crushers",
-            "Dumbbell Single-Arm Preacher Curls",
-            // Core
-            "Hanging Leg Raises",
-            "Ab-Wheel Rollout",
-            "Medicine Ball V-Ups",
-            "Swiss Ball Jacknife",
-            "Swiss Ball Pike"
+    // Array to store all the available exercises for intermediate users (currently 20)
+    static String[] intermediateHIITExercises = {
+            "Box jumps",
+            "Battle ropes swings",
+            "Jumping lunges",
+            "Kettlebell swings",
+            "Mountain climbers",
+            "Plank jacks",
+            "Burpees",
+            "Jump squats",
+            "Rowing machine sprints",
+            "Medicine ball slams",
+            "Bike sprints",
+            "Jumping jacks",
+            "High knees",
+            "Jump rope",
+            "Dumbbell thrusters",
+            "Russian twists",
+            "Treadmill sprints",
+            "TRX pushups",
+            "Sled pushes",
+            "TRX rowing"
     };
 
-    // Sets and reps goals for each week, used for progressive overload, defined in ranges for all 3 plans
-    // 1st element represents sets, 2nd and 3rd elements represent target rep ranges
+    // Array to store all the available exercises for advanced users (currently 20)
+    static String[] advancedHIITExercises = {
+            "Burpee box jumps",
+            "Battle ropes",
+            "Jumping lunges",
+            "Plyometric push-ups",
+            "Kettlebell swings",
+            "Medicine ball slams",
+            "Sled pushes",
+            "Rowing sprints",
+            "Boxing bag drills",
+            "Squat jumps with overhead press",
+            "Sprint intervals on the treadmill",
+            "Jump rope double unders",
+            "Bear crawl with push-up",
+            "Turkish get-ups",
+            "Treadmill sprints",
+            "Wall balls",
+            "Assault bike sprints",
+            "Broad jumps",
+            "Barbell thrusters",
+            "Power snatches"
+    };
+
+    // Exercise and rest time goals for each week, used for progressive overload, defined in ranges for all 3 plans
+    // First 2 elements represent exercise time ranges, last 2 rest time ranges
     static int[][] beginnerPlan = {
             // Week 1
-            {2, 8, 10},
+            {20, 30, 20, 40},
             // Week 2
-            {3, 8, 10},
+            {25, 35, 20, 40},
             // Week 3
-            {3, 10, 12},
+            {35, 40, 15, 35},
             // Week 4
-            {3, 12, 14}
+            {35, 40, 10, 30}
     };
 
     static int[][] intermediatePlan = {
             // Week 1
-            {3, 10, 12},
+            {25, 35, 15, 35},
             // Week 2
-            {3, 12, 14},
+            {35, 40, 15, 35},
             // Week 3
-            {4, 10, 12},
+            {45, 50, 10, 30},
             // Week 4
-            {4, 12, 14}
+            {45, 50, 10, 25}
     };
 
     static int[][] advancedPlan = {
             // Week 1
-            {4, 10, 12},
+            {40, 45, 10, 30},
             // Week 2
-            {4, 10, 12},
+            {50, 55, 10, 25},
             // Week 3
-            {4, 12, 14},
+            {60, 65, 10, 20},
             // Week 4
-            {4, 12, 14}
+            {60, 65, 10, 15}
     };
 
-    /**
-     * First 4 elements represent workout per week - 5th element represents exercises per workout
-     * 6th element represents total workouts in the 4 weeks - 7th element the total number of genes in the chromosome
-     */
-    static int [] beginnerConfig = {3, 3, 4, 4, 4, 14, 168};
-    static int [] intermediateConfig = {4, 4, 5, 5, 5, 18, 270};
-    static int [] advancedConfig = {5, 5, 6, 6, 6, 22, 396};
+    // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
+    static int [] beginnerConfig = {3, 4, 12, 144};
+    static int [] intermediateConfig = {4, 5, 16, 240};
+    static int [] advancedConfig = {5, 6, 20, 360};
 
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
@@ -211,10 +176,10 @@ public class MuscleBuildingGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(beginnerConfig[6]);
+        Population population = geneticAlgorithm.initPopulation(advancedConfig[3]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -238,7 +203,7 @@ public class MuscleBuildingGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
             // Increment the generation count
             generation++;
@@ -261,7 +226,7 @@ public class MuscleBuildingGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString(beginnerExercises, beginnerConfig);
+        solution.solutionToString(advancedHIITExercises,advancedConfig);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 
