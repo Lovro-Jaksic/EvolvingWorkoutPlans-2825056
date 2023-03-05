@@ -81,7 +81,7 @@ public class Individual {
      * A method to output the solution in a more readable format with
      * words, and not an int chromosome
      */
-    public void solutionToString(String[] exercises, int [] userConfig) {
+    public void solutionToString(String[] exercises, int[] userConfig) {
         // A hashmap to store the exercise IDs and the names of the exercises as values
         HashMap<Integer, String> exerciseMap = new HashMap<>();
 
@@ -97,7 +97,7 @@ public class Individual {
                 " Optimized Cardio Endurance Schedule " +
                 " ------------------------------------------------------->");
 
-        // A for loop to print out individual exercises and their corresponding sets and reps
+        // A for loop to print out individual exercises and their corresponding active and rest times
         for (int i = 0; i < this.chromosome.length; i += 3) {
             System.out.print(exerciseMap.get(this.chromosome[i]) + " -->" + " Active time: " +
                     this.chromosome[i + 1] + "sec Rest time: " + this.chromosome[i + 2]

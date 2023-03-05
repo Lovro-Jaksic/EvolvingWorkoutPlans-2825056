@@ -37,20 +37,25 @@ public class GeneticAlgorithm {
      * @param individual
      * @return
      */
-    public double calcFitness(Individual individual, int[][] userPlan, int[] userLevel) {
+    public double calcFitness(Individual individual, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
 
         // For loop to iterate through a selected amount of workouts (12, 16, or 20)
-        for (int workout = 0; workout <= individual.getChromosomeLength() / userLevel[2]; workout++) {
+        for (int workout = 0; workout <= individual.getChromosomeLength() / userConfig[2]; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
             Set<Integer> selectedExercises = new HashSet<>();
 
+            int totalActiveTime = 0;
+            int totalRestTime = 0;
+            int averageActiveTime = 0;
+            int averageRestTime = 0;
+
             // For loop to iterate through all the exercises per workout (4, 5, 6)
-            for (int exercise = 0; exercise < userLevel[1]; exercise++) {
+            for (int exercise = 0; exercise < userConfig[1]; exercise++) {
                 // For loop to iterate through 3 genes per exercise
                 for (int gene = 0; gene < 3; gene++) {
-                    int chromosomePosition = gene + exercise * 3 + workout * userLevel[1];
+                    int chromosomePosition = gene + exercise * 3 + workout * userConfig[1];
                     int currentGene = individual.getGene(chromosomePosition);
 
                     // Check if there are any repeating exercises inside the workout
@@ -65,19 +70,21 @@ public class GeneticAlgorithm {
 
                         // Calculate the fitness according to the ranges for exercise times
                     } else if (gene == 1) {
-                        if (workout < userLevel[2] / 4) {
+                        totalActiveTime += currentGene;
+
+                        if (workout < userConfig[2] / 4) {
                             if (currentGene >= userPlan[0][0] && currentGene <= userPlan[0][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > (userLevel[2] / 4) - 1 && workout < (userLevel[2] / 4) * 2) {
+                        } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
                             if (currentGene >= userPlan[1][0] && currentGene <= userPlan[1][1]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > ((userLevel[2] / 4) * 2) - 1 && workout < (userLevel[2] / 4) * 3) {
+                        } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
                             if (currentGene >= userPlan[2][0] && currentGene <= userPlan[2][1]) {
                                 fitness += 1000;
                             } else {
@@ -92,19 +99,21 @@ public class GeneticAlgorithm {
                         }
                         // Calculate the fitness according to the ranges for rest times
                     } else {
-                        if (workout < userLevel[2] / 4) {
+                        totalRestTime += currentGene;
+
+                        if (workout < userConfig[2] / 4) {
                             if (currentGene >= userPlan[0][2] && currentGene <= userPlan[0][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > (userLevel[2] / 4) - 1 && workout < (userLevel[2] / 4) * 2) {
+                        } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
                             if (currentGene >= userPlan[1][2] && currentGene <= userPlan[1][3]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > ((userLevel[2] / 4) * 2) - 1 && workout < (userLevel[2] / 4) * 3) {
+                        } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
                             if (currentGene >= userPlan[2][2] && currentGene <= userPlan[2][3]) {
                                 fitness += 1000;
                             } else {
@@ -117,6 +126,94 @@ public class GeneticAlgorithm {
                                 fitness -= 500;
                             }
                         }
+                    }
+                }
+            }
+            averageActiveTime = totalActiveTime / userConfig[1];
+            averageRestTime = totalRestTime / userConfig[1];
+
+            // Fitness calculations for the average active time in a single workout
+            if (workout < userConfig[2] / 4) {
+                if (averageActiveTime >= userPlan[0][0] && averageActiveTime <= userPlan[0][1]) {
+                    fitness += 1000;
+                } else {
+                    if (averageActiveTime < userPlan[0][0]) {
+                        fitness -= Math.abs(userPlan[0][0] - averageActiveTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[0][1] - averageActiveTime) * 200;
+                    }
+                }
+            } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
+                if (averageActiveTime >= userPlan[1][0] && averageActiveTime <= userPlan[1][1]) {
+                    fitness += 1000;
+                } else {
+                    if (averageActiveTime < userPlan[1][0]) {
+                        fitness -= Math.abs(userPlan[1][0] - averageActiveTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[1][1] - averageActiveTime) * 200;
+                    }
+                }
+            } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
+                if (averageActiveTime >= userPlan[2][0] && averageActiveTime <= userPlan[2][1]) {
+                    fitness += 1000;
+                } else {
+                    if (averageActiveTime < userPlan[2][0]) {
+                        fitness -= Math.abs(userPlan[2][0] - averageActiveTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[2][1] - averageActiveTime) * 200;
+                    }
+                }
+            } else {
+                if (averageActiveTime >= userPlan[3][0] && averageActiveTime <= userPlan[3][1]) {
+                    fitness += 1000;
+                } else {
+                    if (averageActiveTime < userPlan[3][0]) {
+                        fitness -= Math.abs(userPlan[3][0] - averageActiveTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[3][1] - averageActiveTime) * 200;
+                    }
+                }
+            }
+
+            // Fitness calculations for the average rest time in a single workout
+            if (workout < userConfig[2] / 4) {
+                if (averageRestTime >= userPlan[0][2] && averageRestTime <= userPlan[0][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[0][2]) {
+                        fitness -= Math.abs(userPlan[0][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[0][3] - averageRestTime) * 200;
+                    }
+                }
+            } else if (workout > (userConfig[2] / 4) - 1 && workout < (userConfig[2] / 4) * 2) {
+                if (averageRestTime >= userPlan[1][2] && averageRestTime <= userPlan[1][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[1][2]) {
+                        fitness -= Math.abs(userPlan[1][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[1][2] - averageRestTime) * 200;
+                    }
+                }
+            } else if (workout > ((userConfig[2] / 4) * 2) - 1 && workout < (userConfig[2] / 4) * 3) {
+                if (averageRestTime >= userPlan[2][2] && averageRestTime <= userPlan[2][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[2][2]) {
+                        fitness -= Math.abs(userPlan[2][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[2][3] - averageRestTime) * 200;
+                    }
+                }
+            } else {
+                if (averageRestTime >= userPlan[3][2] && averageRestTime <= userPlan[3][3]) {
+                    fitness += 1000;
+                } else {
+                    if (averageRestTime < userPlan[3][2]) {
+                        fitness -= Math.abs(userPlan[3][2] - averageRestTime) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[3][3] - averageRestTime) * 200;
                     }
                 }
             }

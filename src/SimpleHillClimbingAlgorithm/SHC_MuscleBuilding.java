@@ -3,7 +3,7 @@ package SimpleHillClimbingAlgorithm;
 import java.util.*;
 
 public class SHC_MuscleBuilding {
-    // Array to store all the available exercises (currently 25)
+    // Array to store all the available beginner exercises (currently 25)
     static String [] beginnerExercises = {
             // Chest
             "Push-ups",
@@ -37,7 +37,7 @@ public class SHC_MuscleBuilding {
             "Dead Bug"
     };
 
-    // Array to store all the available exercises (currently 25)
+    // Array to store all the available intermediate exercises (currently 25)
     static String [] intermediateExercises = {
             // Chest
             "Dumbbell Bench Press with Resistance Bands",
@@ -71,7 +71,7 @@ public class SHC_MuscleBuilding {
             "Medicine Ball Slams"
     };
 
-    // Array to store all the available exercises (currently 25)
+    // Array to store all the available advanced exercises (currently 25)
     static String [] advancedExercises = {
             // Chest
             "Plyometric Pushup",
@@ -230,7 +230,7 @@ public class SHC_MuscleBuilding {
         int newExercise = random.nextInt(exerciseList.length);
         newSolution[startIndex] = newExercise;
 
-        // Randomly select the number of sets and reps within the target range
+        // Randomly select the number of sets within the target range
         if ((startIndex + 1) < (userConfig[0] * userConfig[4] * 3)) {
             newSolution[startIndex+1] = userPlan[0][0];
         } else if ((startIndex + 1) > ((userConfig[0] * userConfig[4] * 3) - 1) && (startIndex + 1) < (userConfig[0] + (userConfig[1]) * userConfig[4] * 3)) {
@@ -241,6 +241,7 @@ public class SHC_MuscleBuilding {
             newSolution[startIndex+1] = userPlan[3][0];
         }
 
+        // Randomly select the number of reps within the target range
         if ((startIndex + 2) < (userConfig[0] * userConfig[4] * 3)) {
             int minReps = userPlan[0][1];
             int maxReps = userPlan[0][2];

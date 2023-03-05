@@ -31,7 +31,6 @@ public class CardioEnduranceGA {
             "Battle Ropes"
     };
 
-
     // Array to store all the available exercises for intermediate users (currently 20)
     static String[] intermediateHIITExercises = {
             "Box jumps",
@@ -55,7 +54,6 @@ public class CardioEnduranceGA {
             "Sled pushes",
             "TRX rowing"
     };
-
 
     // Array to store all the available exercises for advanced users (currently 20)
     static String[] advancedHIITExercises = {
@@ -116,7 +114,7 @@ public class CardioEnduranceGA {
             {60, 65, 10, 15}
     };
 
-    // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels
+    // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
     static int [] beginnerConfig = {3, 4, 12, 144};
     static int [] intermediateConfig = {4, 5, 16, 240};
     static int [] advancedConfig = {5, 6, 20, 360};

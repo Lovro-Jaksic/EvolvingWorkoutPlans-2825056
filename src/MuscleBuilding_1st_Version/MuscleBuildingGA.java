@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class MuscleBuildingGA {
 
-    // Array to store all the available exercises (currently 25)
+    // Array to store all the available beginner exercises (currently 25)
     static String [] beginnerExercises = {
             // Chest
             "Push-ups",
@@ -43,7 +43,7 @@ public class MuscleBuildingGA {
             "Dead Bug"
     };
 
-    // Array to store all the available exercises (currently 25)
+    // Array to store all the available intermediate exercises (currently 25)
     static String [] intermediateExercises = {
             // Chest
             "Dumbbell Bench Press with Resistance Bands",
@@ -77,7 +77,7 @@ public class MuscleBuildingGA {
             "Medicine Ball Slams"
     };
 
-    // Array to store all the available exercises (currently 25)
+    // Array to store all the available advanced exercises (currently 25)
     static String [] advancedExercises = {
             // Chest
             "Plyometric Pushup",

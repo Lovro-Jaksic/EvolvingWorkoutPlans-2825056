@@ -37,11 +37,11 @@ public class GeneticAlgorithm {
      * @param individual
      * @return
      */
-    public double calcFitness(Individual individual, int[][] userPlan, int[] userLevel) {
+    public double calcFitness(Individual individual, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
 
         // For loop to iterate through a selected amount of workouts (14, 18, or 22)
-        for (int workout = 0; workout <= individual.getChromosomeLength() / userLevel[5]; workout++) {
+        for (int workout = 0; workout <= individual.getChromosomeLength() / userConfig[5]; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
             Set<Integer> selectedExercises = new HashSet<>();
@@ -51,11 +51,16 @@ public class GeneticAlgorithm {
             int armsShouldersTrained = 0;
             int coreTrained = 0;
 
+            int totalSets = 0;
+            int totalReps = 0;
+            int averageNumOfSets = 0;
+            int averageNumOfReps = 0;
+
             // For loop to iterate through all the exercises per workout (4, 5, 6)
-            for (int exercise = 0; exercise < userLevel[4]; exercise++) {
+            for (int exercise = 0; exercise < userConfig[4]; exercise++) {
                 // For loop to iterate through 3 genes per exercise
                 for (int gene = 0; gene < 3; gene++) {
-                    int chromosomePosition = gene + exercise * 3 + workout * userLevel[4];
+                    int chromosomePosition = gene + exercise * 3 + workout * userConfig[4];
                     int currentGene = individual.getGene(chromosomePosition);
 
                     // Calculate the number of exercises per body part
@@ -85,19 +90,21 @@ public class GeneticAlgorithm {
                         }
                         //Calculate the fitness according to the sets and progressive overload
                     } else if (gene == 1) {
-                        if (workout < userLevel[0]) {
+                        totalSets += currentGene;
+
+                        if (workout < userConfig[0]) {
                             if (currentGene == userPlan[0][0]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > (userLevel[0] - 1) && workout < (userLevel[0] + userLevel[1])) {
+                        } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
                             if (currentGene == userPlan[1][0]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > ((userLevel[0] + userLevel[1]) - 1) && workout < (userLevel[0] + userLevel[1] + userLevel[2])) {
+                        } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
                             if (currentGene == userPlan[2][0]) {
                                 fitness += 1000;
                             } else {
@@ -112,19 +119,21 @@ public class GeneticAlgorithm {
                         }
                         // Calculate the fitness according to the reps and progressive overload
                     } else {
-                        if (workout < userLevel[0]) {
+                        totalReps += currentGene;
+
+                        if (workout < userConfig[0]) {
                             if (currentGene >= userPlan[0][1] && currentGene <= userPlan[0][2]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > (userLevel[0] - 1) && workout < (userLevel[0] + userLevel[1])) {
+                        } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
                             if (currentGene >= userPlan[1][1] && currentGene <= userPlan[1][2]) {
                                 fitness += 1000;
                             } else {
                                 fitness -= 500;
                             }
-                        } else if (workout > ((userLevel[0] + userLevel[1]) - 1) && workout < (userLevel[0] + userLevel[1] + userLevel[2])) {
+                        } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
                             if (currentGene >= userPlan[2][1] && currentGene <= userPlan[2][2]) {
                                 fitness += 1000;
                             } else {
@@ -140,6 +149,80 @@ public class GeneticAlgorithm {
                     }
                 }
             }
+
+            averageNumOfSets = totalSets / userConfig[4];
+            averageNumOfReps = totalReps / userConfig[4];
+
+            // Fitness calculations for the average number of sets in a workout
+            if (workout < userConfig[0]) {
+                if (averageNumOfSets != userPlan[0][0]) {
+                    fitness -= Math.abs(userPlan[0][0] - averageNumOfSets) * 200;
+                } else {
+                    fitness += 1000;
+                }
+            } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
+                if (averageNumOfSets != userPlan[1][0]) {
+                    fitness -= Math.abs(userPlan[1][0] - averageNumOfSets) * 200;
+                } else {
+                    fitness += 1000;
+                }
+            } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
+                if (averageNumOfSets != userPlan[2][0]) {
+                    fitness -= Math.abs(userPlan[2][0] - averageNumOfSets) * 200;
+                } else {
+                    fitness += 1000;
+                }
+            } else {
+                if (averageNumOfSets != userPlan[3][0]) {
+                    fitness -= Math.abs(userPlan[3][0] - averageNumOfSets) * 200;
+                } else {
+                    fitness += 1000;
+                }
+            }
+
+            // Fitness calculations for the average number of reps in a workout
+            if (workout < userConfig[0]) {
+                if (averageNumOfReps >= userPlan[0][1] && averageNumOfReps <= userPlan[0][2]) {
+                    fitness += 1000;
+                } else {
+                    if (averageNumOfReps < userPlan[0][1]) {
+                        fitness -= Math.abs(userPlan[0][1] - averageNumOfReps) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[0][2] - averageNumOfReps) * 200;
+                    }
+                }
+            } else if (workout > (userConfig[0] - 1) && workout < (userConfig[0] + userConfig[1])) {
+                if (averageNumOfReps >= userPlan[1][1] && averageNumOfReps <= userPlan[1][2]) {
+                    fitness += 1000;
+                } else {
+                    if (averageNumOfReps < userPlan[1][1]) {
+                        fitness -= Math.abs(userPlan[1][1] - averageNumOfReps) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[1][2] - averageNumOfReps) * 200;
+                    }
+                }
+            } else if (workout > ((userConfig[0] + userConfig[1]) - 1) && workout < (userConfig[0] + userConfig[1] + userConfig[2])) {
+                if (averageNumOfReps >= userPlan[2][1] && averageNumOfReps <= userPlan[2][2]) {
+                    fitness += 1000;
+                } else {
+                    if (averageNumOfReps < userPlan[2][1]) {
+                        fitness -= Math.abs(userPlan[2][1] - averageNumOfReps) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[2][2] - averageNumOfReps) * 200;
+                    }
+                }
+            } else {
+                if (averageNumOfReps >= userPlan[3][1] && averageNumOfReps <= userPlan[3][2]) {
+                    fitness += 1000;
+                } else {
+                    if (averageNumOfReps < userPlan[3][1]) {
+                        fitness -= Math.abs(userPlan[3][1] - averageNumOfReps) * 200;
+                    } else {
+                        fitness -= Math.abs(userPlan[3][2] - averageNumOfReps) * 200;
+                    }
+                }
+            }
+
             if (chestTrained > 2) {
                 fitness -= 500;
             } else if (backTrained > 2) {
