@@ -41,7 +41,7 @@ public class GeneticAlgorithm {
         int fitness = 0;
 
         // For loop to iterate through a selected amount of workouts (14, 18, or 22)
-        for (int workout = 0; workout <= individual.getChromosomeLength() / userLevel[6]; workout++) {
+        for (int workout = 0; workout <= individual.getChromosomeLength() / userLevel[5]; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
             Set<Integer> selectedExercises = new HashSet<>();

@@ -35,8 +35,8 @@ public class Individual {
                 // generate random number between 1 and 25 for index 0, 3, 6, 9, etc.
                 randomNumber = random.nextInt(25) + 1;
             } else if (gene % 3 == 1) {
-                // generate random number between 1 and 5 for index 1, 4, 7, 10, etc.
-                randomNumber = random.nextInt(5) + 1;
+                // generate random number between 2 and 4 for index 1, 4, 7, 10, etc.
+                randomNumber = random.nextInt(3) + 2;
             } else {
                 // generate random number between 8 and 14 for index 2, 5, 8, 11, etc.
                 randomNumber = random.nextInt(9) + 6;
