@@ -10,7 +10,7 @@ import java.util.Map;
 public class MuscleBuildingGA {
 
     // Array to store all the available beginner exercises (currently 25)
-    static String [] beginnerExercises = {
+    static String[] beginnerExercises = {
             // Chest
             "Push-ups",
             "Dumbbell Bench Press",
@@ -44,7 +44,7 @@ public class MuscleBuildingGA {
     };
 
     // Array to store all the available intermediate exercises (currently 25)
-    static String [] intermediateExercises = {
+    static String[] intermediateExercises = {
             // Chest
             "Dumbbell Bench Press with Resistance Bands",
             "Dips",
@@ -78,7 +78,7 @@ public class MuscleBuildingGA {
     };
 
     // Array to store all the available advanced exercises (currently 25)
-    static String [] advancedExercises = {
+    static String[] advancedExercises = {
             // Chest
             "Plyometric Pushup",
             "Weighted Dips",
@@ -115,44 +115,44 @@ public class MuscleBuildingGA {
     // 1st element represents sets, 2nd and 3rd elements represent target rep ranges
     static int[][] beginnerPlan = {
             // Week 1
-            {2, 8, 10},
+            {2, 6, 8},
             // Week 2
-            {3, 8, 10},
+            {3, 6, 8},
             // Week 3
-            {3, 10, 12},
+            {3, 8, 10},
             // Week 4
-            {3, 12, 14}
+            {3, 8, 10}
     };
 
     static int[][] intermediatePlan = {
             // Week 1
-            {3, 10, 12},
+            {3, 6, 8},
             // Week 2
-            {3, 12, 14},
+            {3, 8, 10},
             // Week 3
-            {4, 10, 12},
+            {4, 8, 10},
             // Week 4
-            {4, 12, 14}
+            {4, 10, 12}
     };
 
     static int[][] advancedPlan = {
             // Week 1
-            {4, 10, 12},
+            {4, 8, 10},
             // Week 2
-            {4, 10, 12},
+            {4, 8, 10},
             // Week 3
-            {4, 12, 14},
+            {4, 10, 12},
             // Week 4
-            {4, 12, 14}
+            {4, 10, 12}
     };
 
     /**
-     * First 4 elements represent workout per week - 5th element represents exercises per workout
+     * First 4 elements represent workouts per week - 5th element represents exercises per workout
      * 6th element represents total workouts in the 4 weeks - 7th element the total number of genes in the chromosome
      */
-    static int [] beginnerConfig = {3, 3, 4, 4, 4, 14, 168};
-    static int [] intermediateConfig = {4, 4, 5, 5, 5, 18, 270};
-    static int [] advancedConfig = {5, 5, 6, 6, 6, 22, 396};
+    static int[] beginnerConfig = {3, 3, 4, 4, 4, 14, 168};
+    static int[] intermediateConfig = {4, 4, 5, 5, 5, 18, 270};
+    static int[] advancedConfig = {5, 5, 6, 6, 6, 22, 396};
 
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
@@ -167,11 +167,11 @@ public class MuscleBuildingGA {
 
     public static void main(String[] args) {
         // Populate the hyperparameter grid
-        hyperParameters.put("populationSize", new double[] {50, 70, 100, 150, 200});
-        hyperParameters.put("mutationRate", new double[] {0.001, 0.005, 0.01, 0.02, 0.05});
-        hyperParameters.put("crossoverRate", new double[] {0.5, 0.7, 0.8, 0.9, 0.95});
-        hyperParameters.put("elitismCount", new double[] {1, 2, 4, 5, 8});
-        hyperParameters.put("selectionSize", new double[] {1, 3, 5, 8, 10});
+        hyperParameters.put("populationSize", new double[]{100, 150, 200, 250, 300});
+        hyperParameters.put("mutationRate", new double[]{0.001, 0.005, 0.01, 0.02, 0.05});
+        hyperParameters.put("crossoverRate", new double[]{0.5, 0.7, 0.8, 0.9, 0.95});
+        hyperParameters.put("elitismCount", new double[]{1, 2, 4, 5, 8});
+        hyperParameters.put("selectionSize", new double[]{1, 3, 5, 8, 10});
 
 //        // Loop through all possible combinations of hyperparameters
 //        for (double populationSize : hyperParameters.get("populationSize")) {
@@ -201,9 +201,40 @@ public class MuscleBuildingGA {
 //                    (int) hyperParameters.get("selectionSize")[2]);
 //        }
 
-        runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
-                hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
-                (int) hyperParameters.get("selectionSize")[2]);
+        long totalDurationMillis = 0;
+
+        for (int i = 0; i < 30; i++) {
+            // Record the start time
+            long startTime = System.currentTimeMillis();
+
+            System.out.println("Run number: " + (i + 1));
+
+            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[0], hyperParameters.get("mutationRate")[0],
+                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
+                    (int) hyperParameters.get("selectionSize")[2]);
+
+            // Record the end time
+            long endTime = System.currentTimeMillis();
+
+            // Calculate the duration
+            long durationMillis = endTime - startTime;
+
+            // Calculate the duration and add it to the total duration
+            totalDurationMillis += durationMillis;
+
+            // Convert to seconds, minutes, and hours
+            double durationSeconds = durationMillis / 1000.0;
+//            double durationMinutes = durationSeconds / 60.0;
+//            double durationHours = durationMinutes / 60.0;
+
+            // Print the duration
+//            System.out.println("Duration of the run: " + durationMillis + " milliseconds");
+            System.out.println("Duration of the run: " + durationSeconds + " seconds");
+//            System.out.println("Duration of the run: " + durationMinutes + " minutes");
+//            System.out.println("Duration of the run: " + durationHours + " hours");
+        }
+        System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
+        System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
     }
 
     public static void runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {

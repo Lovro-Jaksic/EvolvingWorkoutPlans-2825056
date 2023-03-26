@@ -3,6 +3,15 @@ package MuscleBuilding_1st_Version;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ The Individual class represents an individual solution in the population of the genetic algorithm for the 4-week
+ workout plan.
+ Each Individual has a chromosome that contains genes representing exercises, sets and reps for
+ each workout.
+ The class provides methods to create and manipulate individuals, as well as to evaluate their fitness
+ and output their solution in a readable format.
+ */
+
 public class Individual {
     private int [] chromosome;
     private double fitness = -1;
@@ -38,8 +47,8 @@ public class Individual {
                 // generate random number between 2 and 4 for index 1, 4, 7, 10, etc.
                 randomNumber = random.nextInt(3) + 2;
             } else {
-                // generate random number between 8 and 14 for index 2, 5, 8, 11, etc.
-                randomNumber = random.nextInt(9) + 6;
+                // generate random number between 6 and 12 for index 2, 5, 8, 11, etc.
+                randomNumber = random.nextInt(7) + 6;
             }
             this.setGene(gene, randomNumber);
         }
