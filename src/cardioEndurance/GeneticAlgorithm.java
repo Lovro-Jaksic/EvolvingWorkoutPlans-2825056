@@ -32,15 +32,13 @@ public class GeneticAlgorithm {
      *
      * (sets and reps and later more difficult exercises)
      *
-     * TODO: Implement the fitness function so that it relates to the cardio endurance programme
-     *
      * @param individual
      * @return
      */
     public double calcFitness(Individual individual, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
 
-        // For loop to iterate through a selected amount of workouts (12, 16, or 20)
+        // For loop to iterate through a selected amount of workouts (12, 16, or 20) depending on the user plan
         for (int workout = 0; workout <= individual.getChromosomeLength() / userConfig[2]; workout++) {
 
             // HashSet for checking whether exercises repeat in a workout
@@ -305,7 +303,7 @@ public class GeneticAlgorithm {
     public Individual rouletteWheelSelection(Population population) {
         // Calculate the total fitness of the population
         double populationFitness = population.getPopulationFitness();
-        System.out.println("Population fitness: " + populationFitness);
+//        System.out.println("Population fitness: " + populationFitness);
 
         // Generate a random value between 0 and the total fitness of the population
         double randomRoulettePosition = Math.random() * populationFitness;
@@ -335,12 +333,10 @@ public class GeneticAlgorithm {
      *
      * When the pointer becomes less than the cumulative fitness,
      * we have found the selected parent, and we return that individual.
-     *
-     * TODO: An error with indexing in stochastic selection
      * @param population
      * @return
      */
-    public Individual stochasticSelection(Population population) {
+    public MuscleBuilding_1st_Version.Individual stochasticSelection(MuscleBuilding_1st_Version.Population population) {
         int populationSize = population.size();
         // Calculate the total fitness of the population
         double populationFitness = population.getPopulationFitness();
@@ -354,11 +350,11 @@ public class GeneticAlgorithm {
         int index = 0;
         double cumulativeFitness = population.getIndividual(index).getFitness();
 
-        // Loop until the pointer falls within the cumulative fitness range of an individual
-        while(pointer > cumulativeFitness) {
+        // Loop until the pointer falls within the cumulative fitness range of an individual and prevent going out of bounds
+        while(pointer > cumulativeFitness && index < populationSize - 1) {
+            index++;
             // Update the cumulative fitness with the fitness of the next individual
             cumulativeFitness += population.getIndividual(index).getFitness();
-            index++;
         }
         return population.getIndividual(index);
     }
@@ -387,18 +383,23 @@ public class GeneticAlgorithm {
      * @param population
      * @return
      */
-    public Individual truncationSelection(Population population) {
+    public MuscleBuilding_1st_Version.Individual truncationSelection(MuscleBuilding_1st_Version.Population population) {
         int populationSize = population.size();
         // Calculate the truncation index, which is a fraction of the population size determined by the selection size parameter
         int truncationIndex = (int) (populationSize * this.selectionSize);
 
+        // Ensure the truncationIndex is within bounds
+        if (truncationIndex >= populationSize) {
+            truncationIndex = populationSize - 1;
+        }
+
         // Create a new population with the truncation size
-        Population truncationPopulation = new Population(truncationIndex);
+        MuscleBuilding_1st_Version.Population truncationPopulation = new MuscleBuilding_1st_Version.Population(truncationIndex);
 
         // Loop through the truncation size
         for (int i = 0; i < truncationIndex; i++) {
             // Get the fittest individual in the population
-            Individual truncationIndividual = population.getFittest(i);
+            MuscleBuilding_1st_Version.Individual truncationIndividual = population.getFittest(i);
             // Add the individual to the truncation population
             truncationPopulation.setIndividual(i, truncationIndividual);
         }
@@ -704,7 +705,7 @@ public class GeneticAlgorithm {
                         } else if (positionTracker == 1) {
                             newGene = random.nextInt(41) + 20;
                         } else {
-                            newGene = random.nextInt(21) + 10;
+                            newGene = random.nextInt(31) + 10;
                         }
                         // Mutate the specific gene of the individual
                         individual.setGene(geneIndex, newGene);

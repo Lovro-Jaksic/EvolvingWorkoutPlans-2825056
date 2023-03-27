@@ -109,15 +109,15 @@ public class CardioEnduranceGA {
             // Week 2
             {50, 55, 10, 25},
             // Week 3
-            {60, 65, 10, 20},
+            {55, 60, 10, 20},
             // Week 4
-            {60, 65, 10, 15}
+            {55, 60, 10, 15}
     };
 
     // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
-    static int [] beginnerConfig = {3, 4, 12, 144};
-    static int [] intermediateConfig = {4, 5, 16, 240};
-    static int [] advancedConfig = {5, 6, 20, 360};
+    static int[] beginnerConfig = {3, 4, 12, 144};
+    static int[] intermediateConfig = {4, 5, 16, 240};
+    static int[] advancedConfig = {5, 6, 20, 360};
 
     // The number of generations used for terminating the algorithm
     public static int maxGenerations = 500;
@@ -132,11 +132,11 @@ public class CardioEnduranceGA {
 
     public static void main(String[] args) {
         // Populate the hyperparameter grid
-        hyperParameters.put("populationSize", new double[] {50, 70, 100, 150, 200});
-        hyperParameters.put("mutationRate", new double[] {0.001, 0.005, 0.01, 0.02, 0.05});
-        hyperParameters.put("crossoverRate", new double[] {0.5, 0.7, 0.8, 0.9, 0.95});
-        hyperParameters.put("elitismCount", new double[] {1, 2, 4, 5, 8});
-        hyperParameters.put("selectionSize", new double[] {1, 3, 5, 8, 10});
+        hyperParameters.put("populationSize", new double[]{50, 100, 150, 200, 250});
+        hyperParameters.put("mutationRate", new double[]{0.001, 0.005, 0.01, 0.02, 0.05});
+        hyperParameters.put("crossoverRate", new double[]{0.5, 0.7, 0.8, 0.9, 0.95});
+        hyperParameters.put("elitismCount", new double[]{1, 2, 4, 5, 8});
+        hyperParameters.put("selectionSize", new double[]{1, 3, 5, 8, 10});
 
 //        // Loop through all possible combinations of hyperparameters
 //        for (double populationSize : hyperParameters.get("populationSize")) {
@@ -166,9 +166,40 @@ public class CardioEnduranceGA {
 //                    (int) hyperParameters.get("selectionSize")[2]);
 //        }
 
-        runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
-                hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
-                (int) hyperParameters.get("selectionSize")[2]);
+        long totalDurationMillis = 0;
+
+        for (int i = 0; i < 30; i++) {
+            // Record the start time
+            long startTime = System.currentTimeMillis();
+
+            System.out.println("Run number: " + (i + 1));
+
+            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[1], hyperParameters.get("mutationRate")[0],
+                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
+                    (int) hyperParameters.get("selectionSize")[2]);
+
+            // Record the end time
+            long endTime = System.currentTimeMillis();
+
+            // Calculate the duration
+            long durationMillis = endTime - startTime;
+
+            // Calculate the duration and add it to the total duration
+            totalDurationMillis += durationMillis;
+
+            // Convert to seconds, minutes, and hours
+            double durationSeconds = durationMillis / 1000.0;
+//            double durationMinutes = durationSeconds / 60.0;
+//            double durationHours = durationMinutes / 60.0;
+
+            // Print the duration
+//            System.out.println("Duration of the run: " + durationMillis + " milliseconds");
+            System.out.println("Duration of the run: " + durationSeconds + " seconds");
+//            System.out.println("Duration of the run: " + durationMinutes + " minutes");
+//            System.out.println("Duration of the run: " + durationHours + " hours");
+        }
+        System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
+        System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
     }
 
     public static void runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
@@ -176,10 +207,10 @@ public class CardioEnduranceGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(advancedConfig[3]);
+        Population population = geneticAlgorithm.initPopulation(beginnerConfig[3]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
+        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -203,7 +234,7 @@ public class CardioEnduranceGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
+            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
             // Increment the generation count
             generation++;
@@ -226,7 +257,7 @@ public class CardioEnduranceGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString(advancedHIITExercises,advancedConfig);
+        solution.solutionToString(beginnerHIITExercises, beginnerConfig);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 

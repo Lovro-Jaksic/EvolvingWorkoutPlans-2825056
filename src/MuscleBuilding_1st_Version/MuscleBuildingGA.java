@@ -155,7 +155,7 @@ public class MuscleBuildingGA {
     static int[] advancedConfig = {5, 5, 6, 6, 6, 22, 396};
 
     // The number of generations used for terminating the algorithm
-    public static int maxGenerations = 500;
+    public static int maxGenerations = 250;
 
     // Define the hyperparameter grid
     public static Map<String, double[]> hyperParameters = new HashMap<>();
@@ -167,7 +167,7 @@ public class MuscleBuildingGA {
 
     public static void main(String[] args) {
         // Populate the hyperparameter grid
-        hyperParameters.put("populationSize", new double[]{100, 150, 200, 250, 300});
+        hyperParameters.put("populationSize", new double[]{50, 100, 150, 200, 250});
         hyperParameters.put("mutationRate", new double[]{0.001, 0.005, 0.01, 0.02, 0.05});
         hyperParameters.put("crossoverRate", new double[]{0.5, 0.7, 0.8, 0.9, 0.95});
         hyperParameters.put("elitismCount", new double[]{1, 2, 4, 5, 8});

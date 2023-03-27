@@ -4,6 +4,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
+/**
+ * A population is an abstraction of a collection of individuals.
+ * The population class is generally used to perform group-level operations on its individuals,
+ * such as finding the strongest individuals, collecting stats on the population as a whole,
+ * and selecting individuals to mutate or crossover
+ */
+
 public class Population {
     private Individual population[];
 

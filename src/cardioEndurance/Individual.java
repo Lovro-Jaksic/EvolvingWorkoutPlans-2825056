@@ -3,6 +3,15 @@ package cardioEndurance;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ The Individual class represents an individual solution in the population of the genetic algorithm for the 4-week
+ workout plan.
+ Each Individual has a chromosome that contains genes representing exercises, active and rest times for
+ each workout.
+ The class provides methods to create and manipulate individuals, as well as to evaluate their fitness
+ and output their solution in a readable format.
+ */
+
 public class Individual {
     private int [] chromosome;
     private double fitness = -1;
@@ -38,8 +47,8 @@ public class Individual {
                 // generate random number between 20 and 60 for index 1, 4, 7, 10, etc.
                 randomNumber = random.nextInt(41) + 20;
             } else {
-                // generate random number between 10 and 30 for index 2, 5, 8, 11, etc.
-                randomNumber = random.nextInt(21) + 10;
+                // generate random number between 10 and 40 for index 2, 5, 8, 11, etc.
+                randomNumber = random.nextInt(31) + 10;
             }
             this.setGene(gene, randomNumber);
         }

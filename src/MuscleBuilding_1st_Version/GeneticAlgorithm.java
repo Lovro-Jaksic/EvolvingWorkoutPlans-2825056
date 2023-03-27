@@ -43,6 +43,7 @@ public class GeneticAlgorithm {
 
             // HashSet for checking whether exercises repeat in a workout
             Set<Integer> selectedExercises = new HashSet<>();
+
             int chestTrained = 0;
             int backTrained = 0;
             int legsTrained = 0;
@@ -348,8 +349,6 @@ public class GeneticAlgorithm {
      *
      * When the pointer becomes less than the cumulative fitness,
      * we have found the selected parent, and we return that individual.
-     *
-     * TODO: An error with indexing in stochastic selection
      * @param population
      * @return
      */
@@ -367,11 +366,11 @@ public class GeneticAlgorithm {
         int index = 0;
         double cumulativeFitness = population.getIndividual(index).getFitness();
 
-        // Loop until the pointer falls within the cumulative fitness range of an individual
-        while(pointer > cumulativeFitness) {
+        // Loop until the pointer falls within the cumulative fitness range of an individual and prevent going out of bounds
+        while(pointer > cumulativeFitness && index < populationSize - 1) {
+            index++;
             // Update the cumulative fitness with the fitness of the next individual
             cumulativeFitness += population.getIndividual(index).getFitness();
-            index++;
         }
         return population.getIndividual(index);
     }
@@ -404,6 +403,11 @@ public class GeneticAlgorithm {
         int populationSize = population.size();
         // Calculate the truncation index, which is a fraction of the population size determined by the selection size parameter
         int truncationIndex = (int) (populationSize * this.selectionSize);
+
+        // Ensure the truncationIndex is within bounds
+        if (truncationIndex >= populationSize) {
+            truncationIndex = populationSize - 1;
+        }
 
         // Create a new population with the truncation size
         Population truncationPopulation = new Population(truncationIndex);
@@ -494,7 +498,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.rouletteWheelSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 int swapPoint = parent1.getChromosomeLength() / 2;
 
@@ -538,7 +542,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.rouletteWheelSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 int swapPoint = (int) (Math.random() * parent1.getChromosomeLength());
 
@@ -579,7 +583,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.rouletteWheelSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 int crossoverPoint1 = (int) (Math.random() * parent1.getChromosomeLength());
                 int crossoverPoint2 = (int) (Math.random() * parent1.getChromosomeLength());
@@ -629,7 +633,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.rouletteWheelSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
 
                 for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
                     if (Math.random() <= 0.5) {
@@ -669,7 +673,7 @@ public class GeneticAlgorithm {
 
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 Individual offspring = new Individual(parent1.getChromosomeLength());
-                Individual parent2 = this.rouletteWheelSelection(population);
+                Individual parent2 = this.tournamentSelection(population);
                 double alpha = Math.random();
 
                 for (int geneIndex = 0; geneIndex < parent1.getChromosomeLength(); geneIndex++) {
