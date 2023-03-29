@@ -1,4 +1,4 @@
-package MuscleBuilding_1st_Version;
+package muscleBuilding;
 
 import java.util.HashMap;
 import java.util.Random;

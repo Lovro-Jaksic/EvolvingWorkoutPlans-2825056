@@ -336,7 +336,7 @@ public class GeneticAlgorithm {
      * @param population
      * @return
      */
-    public MuscleBuilding_1st_Version.Individual stochasticSelection(MuscleBuilding_1st_Version.Population population) {
+    public Individual stochasticSelection(Population population) {
         int populationSize = population.size();
         // Calculate the total fitness of the population
         double populationFitness = population.getPopulationFitness();
@@ -383,7 +383,7 @@ public class GeneticAlgorithm {
      * @param population
      * @return
      */
-    public MuscleBuilding_1st_Version.Individual truncationSelection(MuscleBuilding_1st_Version.Population population) {
+    public Individual truncationSelection(Population population) {
         int populationSize = population.size();
         // Calculate the truncation index, which is a fraction of the population size determined by the selection size parameter
         int truncationIndex = (int) (populationSize * this.selectionSize);
@@ -394,12 +394,12 @@ public class GeneticAlgorithm {
         }
 
         // Create a new population with the truncation size
-        MuscleBuilding_1st_Version.Population truncationPopulation = new MuscleBuilding_1st_Version.Population(truncationIndex);
+        Population truncationPopulation = new Population(truncationIndex);
 
         // Loop through the truncation size
         for (int i = 0; i < truncationIndex; i++) {
             // Get the fittest individual in the population
-            MuscleBuilding_1st_Version.Individual truncationIndividual = population.getFittest(i);
+            Individual truncationIndividual = population.getFittest(i);
             // Add the individual to the truncation population
             truncationPopulation.setIndividual(i, truncationIndividual);
         }
@@ -699,7 +699,7 @@ public class GeneticAlgorithm {
                         Random random = new Random();
                         int newGene = 1;
 
-                        // Keep track of the different mutations for exercises, sets, and reps
+                        // Keep track of the different mutations for exercises, active times, and rest times
                         if (positionTracker == 0) {
                             newGene = random.nextInt(20) + 1;
                         } else if (positionTracker == 1) {

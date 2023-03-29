@@ -1,4 +1,4 @@
-package MuscleBuilding_1st_Version;
+package muscleBuilding;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -691,9 +691,6 @@ public class GeneticAlgorithm {
      * A method used for applying mutation to the population
      *
      * In this case, uniform mutation
-     *
-     * TODO: Implement different mutation methods and test the results
-     *
      * @param population
      * @return
      */

@@ -7,8 +7,8 @@ import java.util.Map;
  * Main class used for running the algorithm
  */
 public class CardioEnduranceGA {
-    // Array to store all the available exercises for beginner users (currently 20)
-    static String[] beginnerHIITExercises = {
+        // Array to store all the available exercises for beginner users (currently 20)
+        static String[] beginnerHIITExercises = {
             "Jumping Jacks",
             "High Knees",
             "Butt Kicks",
@@ -228,7 +228,7 @@ public class CardioEnduranceGA {
 //            population.getFittest(0).solutionToString();
 
             // Apply crossover
-            population = geneticAlgorithm.uniformCrossover(population);
+            population = geneticAlgorithm.arithmeticCrossover(population);
 
             // Apply mutation
             population = geneticAlgorithm.mutatePopulation(population);
