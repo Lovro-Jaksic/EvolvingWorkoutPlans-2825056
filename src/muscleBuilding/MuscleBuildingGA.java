@@ -173,79 +173,115 @@ public class MuscleBuildingGA {
         hyperParameters.put("elitismCount", new double[]{1, 2, 4, 5, 8});
         hyperParameters.put("selectionSize", new double[]{1, 3, 5, 8, 10});
 
-//        // Loop through all possible combinations of hyperparameters
-//        for (double populationSize : hyperParameters.get("populationSize")) {
-//            for (double mutationRate : hyperParameters.get("mutationRate")) {
-//                for (double crossoverRate : hyperParameters.get("crossoverRate")) {
-//                    for (double elitismCount : hyperParameters.get("elitismCount")) {
-//                        for (double selectionSize : hyperParameters.get("selectionSize")) {
-//                            // Call the method for running the genetic algorithm
-//                            runGeneticAlgorithm((int) populationSize, mutationRate, crossoverRate,
-//                                    (int) elitismCount, (int) selectionSize);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        // Print the best result and its corresponding hyperparameters
-//        System.out.println("Best result: " + bestFitness);
-//        System.out.println("Best hyperparameters: " + bestHyperparameters.toString());
+        long totalDurationMillis = 0;
+        long startTime = System.currentTimeMillis();
+        int runCounter = 1;
 
-        /**
-         * Currently takes around 50 seconds for the 30 runs loop -> which would
-         * equate to around 40.5 - 41 hours for the hyperparameter grid search
-         */
+        // Loop through all possible combinations of hyperparameters
+        for (double populationSize : hyperParameters.get("populationSize")) {
+            for (double mutationRate : hyperParameters.get("mutationRate")) {
+                for (double crossoverRate : hyperParameters.get("crossoverRate")) {
+                    for (double elitismCount : hyperParameters.get("elitismCount")) {
+                        for (double selectionSize : hyperParameters.get("selectionSize")) {
+                            // Call the method for running the genetic algorithm
+                            for (int i = 0; i < 30; i++) {
+                                Map<String, Double> result = runGeneticAlgorithm((int) populationSize, mutationRate, crossoverRate,
+                                        (int) elitismCount, (int) selectionSize);
+
+                                System.out.println("Run number: " + runCounter +
+                                        " Population size: " + populationSize +
+                                        ", Mutation rate: " + mutationRate +
+                                        ", Crossover rate: " + crossoverRate +
+                                        ", Elitism count: " + elitismCount +
+                                        ", Selection size: " + selectionSize +
+                                        ", Fitness: " + result.get("fitness"));
+
+                                runCounter++;
+
+                                double currentFitness = result.get("fitness");
+                                if (currentFitness > bestFitness) {
+                                    bestFitness = currentFitness;
+                                    bestHyperparameters.put("populationSize", result.get("populationSize"));
+                                    bestHyperparameters.put("mutationRate", result.get("mutationRate"));
+                                    bestHyperparameters.put("crossoverRate", result.get("crossoverRate"));
+                                    bestHyperparameters.put("elitismCount", result.get("elitismCount"));
+                                    bestHyperparameters.put("selectionSize", result.get("selectionSize"));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Record the end time
+        long endTime = System.currentTimeMillis();
+        // Calculate the duration
+        long durationMillis = endTime - startTime;
+        double durationSeconds = durationMillis / 1000.0;
+        double durationMinutes = durationSeconds / 60.0;
+        double durationHours = durationMinutes / 60.0;
+
+        // Print the durations
+        System.out.println("Duration of the run: " + durationMillis + " milliseconds");
+        System.out.println("Duration of the run: " + durationSeconds + " seconds");
+        System.out.println("Duration of the run: " + durationMinutes + " minutes");
+        System.out.println("Duration of the run: " + durationHours + " hours");
+
+        // Print the best parameters
+        System.out.println("Best Hyperparameters:");
+        for (Map.Entry<String, Double> entry : bestHyperparameters.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+
+        // Print the best result and its corresponding hyperparameters
+        System.out.println("Best fitness: " + bestFitness);
+        System.out.println("Best hyperparameters: " + bestHyperparameters.toString());
+
+//        long totalDurationMillis = 0;
+//
 //        for (int i = 0; i < 30; i++) {
-//            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[2], hyperParameters.get("mutationRate")[0],
+//            // Record the start time
+//            long startTime = System.currentTimeMillis();
+//
+//            System.out.println("Run number: " + (i + 1));
+//
+//            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[0], hyperParameters.get("mutationRate")[0],
 //                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
 //                    (int) hyperParameters.get("selectionSize")[2]);
-//        }
-
-        long totalDurationMillis = 0;
-
-        for (int i = 0; i < 30; i++) {
-            // Record the start time
-            long startTime = System.currentTimeMillis();
-
-            System.out.println("Run number: " + (i + 1));
-
-            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[0], hyperParameters.get("mutationRate")[0],
-                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
-                    (int) hyperParameters.get("selectionSize")[2]);
-
-            // Record the end time
-            long endTime = System.currentTimeMillis();
-
-            // Calculate the duration
-            long durationMillis = endTime - startTime;
-
-            // Calculate the duration and add it to the total duration
-            totalDurationMillis += durationMillis;
-
-            // Convert to seconds, minutes, and hours
-            double durationSeconds = durationMillis / 1000.0;
+//
+//            // Record the end time
+//            long endTime = System.currentTimeMillis();
+//
+//            // Calculate the duration
+//            long durationMillis = endTime - startTime;
+//
+//            // Calculate the duration and add it to the total duration
+//            totalDurationMillis += durationMillis;
+//
+//            // Convert to seconds, minutes, and hours
+//            double durationSeconds = durationMillis / 1000.0;
 //            double durationMinutes = durationSeconds / 60.0;
 //            double durationHours = durationMinutes / 60.0;
-
-            // Print the duration
+//
+//            // Print the duration
 //            System.out.println("Duration of the run: " + durationMillis + " milliseconds");
-            System.out.println("Duration of the run: " + durationSeconds + " seconds");
+//            System.out.println("Duration of the run: " + durationSeconds + " seconds");
 //            System.out.println("Duration of the run: " + durationMinutes + " minutes");
 //            System.out.println("Duration of the run: " + durationHours + " hours");
-        }
-        System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
-        System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
+//        }
+//        System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
+//        System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
     }
 
-    public static void runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
+    public static Map<String,Double> runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
         // Create a genetic algorithm object
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(beginnerConfig[6]);
+        Population population = geneticAlgorithm.initPopulation(advancedConfig[6]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -254,14 +290,8 @@ public class MuscleBuildingGA {
          * The evolution loop
          *
          * Terminates after it reaches the maximum number of generations
-         *
-         * TODO: Create different conditions for termination and test them
          */
         while (!geneticAlgorithm.isTerminationConditionMet(generation, maxGenerations)) {
-            // Print the fittest individual from the population
-//            System.out.println("Generation: " + generation + " --> Best workout: ");
-//            population.getFittest(0).solutionToString();
-
             // Apply crossover
             population = geneticAlgorithm.uniformCrossover(population);
 
@@ -269,32 +299,30 @@ public class MuscleBuildingGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
             // Increment the generation count
             generation++;
         }
 
-//         Check if the current result is better than the previous best result
-//        double currentFitness = population.getFittest(0).getFitness();
-//        if (currentFitness > bestFitness) {
-//            bestFitness = currentFitness;
-//            bestHyperparameters.put("populationSize", (double) populationSize);
-//            bestHyperparameters.put("mutationRate", mutationRate);
-//            bestHyperparameters.put("crossoverRate", crossoverRate);
-//            bestHyperparameters.put("elitismCount", (double) elitismCount);
-//            bestHyperparameters.put("selectionSize", (double) selectionSize);
-//        }
-
         // Print the final solution
-        System.out.println("Stopped after " + maxGenerations + " generations");
+//        System.out.println("Stopped after " + maxGenerations + " generations");
 //        System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
 
         // Testing the new printing of the solution
-        Individual solution = population.getFittest(0);
-        solution.solutionToString(beginnerExercises, beginnerConfig);
+//        Individual solution = population.getFittest(0);
+//        solution.solutionToString(advancedExercises, advancedConfig);
         // Print the fitness of the individual
-        System.out.println(solution.getFitness());
+//        System.out.println(solution.getFitness());
 
+        Map<String, Double> result = new HashMap<>();
+        result.put("fitness", population.getFittest(0).getFitness());
+        result.put("populationSize", (double) populationSize);
+        result.put("mutationRate", mutationRate);
+        result.put("crossoverRate", crossoverRate);
+        result.put("elitismCount", (double) elitismCount);
+        result.put("selectionSize", (double) selectionSize);
+
+        return result;
     }
 }

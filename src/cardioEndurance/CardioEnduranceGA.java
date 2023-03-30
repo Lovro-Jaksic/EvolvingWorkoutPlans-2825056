@@ -207,10 +207,10 @@ public class CardioEnduranceGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(beginnerConfig[3]);
+        Population population = geneticAlgorithm.initPopulation(advancedConfig[3]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -234,7 +234,7 @@ public class CardioEnduranceGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
             // Increment the generation count
             generation++;
@@ -257,7 +257,7 @@ public class CardioEnduranceGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString(beginnerHIITExercises, beginnerConfig);
+        solution.solutionToString(advancedHIITExercises, advancedConfig);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 
