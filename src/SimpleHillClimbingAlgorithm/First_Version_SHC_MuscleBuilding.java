@@ -2,7 +2,7 @@ package SimpleHillClimbingAlgorithm;
 
 import java.util.*;
 
-public class SHC_MuscleBuilding {
+public class First_Version_SHC_MuscleBuilding {
     // Array to store all the available beginner exercises (currently 25)
     static String [] beginnerExercises = {
             // Chest

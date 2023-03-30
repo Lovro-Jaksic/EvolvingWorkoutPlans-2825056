@@ -2,7 +2,7 @@ package SimpleHillClimbingAlgorithm;
 
 import java.util.*;
 
-public class SHC_CardioEndurance {
+public class First_Version_SHC_CardioEndurance {
     // Array to store all the available exercises for beginner users (currently 20)
     static String[] beginnerHIITExercises = {
             "Jumping Jacks",
