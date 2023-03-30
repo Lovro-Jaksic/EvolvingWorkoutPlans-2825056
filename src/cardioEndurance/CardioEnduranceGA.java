@@ -120,7 +120,7 @@ public class CardioEnduranceGA {
     static int[] advancedConfig = {5, 6, 20, 360};
 
     // The number of generations used for terminating the algorithm
-    public static int maxGenerations = 500;
+    public static int maxGenerations = 250;
 
     // Define the hyperparameter grid
     public static Map<String, double[]> hyperParameters = new HashMap<>();

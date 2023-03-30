@@ -2,7 +2,7 @@ package SimpleHillClimbingAlgorithm;
 
 import java.util.*;
 
-public class First_Version_SHC_CardioEndurance {
+public class Third_Version_SHC_CardioEndurance {
     // Array to store all the available exercises for beginner users (currently 20)
     static String[] beginnerHIITExercises = {
             "Jumping Jacks",
@@ -116,7 +116,7 @@ public class First_Version_SHC_CardioEndurance {
     static int [] advancedConfig = {5, 6, 20, 360};
 
     // The number of generations used for terminating the algorithm
-    public static int maxGenerations = 500;
+    public static int maxGenerations = 250;
 
     public static void main(String[] args) {
 
@@ -130,7 +130,7 @@ public class First_Version_SHC_CardioEndurance {
         // The algorithm loop
         while(currentIteration < maxGenerations) {
             // Generate a new solution by changing one exercise
-            int[] newSolution = changeExercise(bestSolution, intermediatePlan, intermediateConfig, intermediateHIITExercises);
+            int[] newSolution = changeSetOfGenes(bestSolution, intermediatePlan, intermediateConfig, intermediateHIITExercises);
             double newFitness = calcFitness(newSolution, intermediatePlan, intermediateConfig);
 
             // If the new solution is better, accept it as the current best solution
@@ -185,63 +185,96 @@ public class First_Version_SHC_CardioEndurance {
      * @param solution the solution to change
      * @return the new solution with one exercise changed
      */
-    public static int[] changeExercise(int[] solution, int[][] userPlan, int[] userConfig, String[] exerciseList) {
+    public static int[] changeSetOfGenes(int[] solution, int[][] userPlan, int[] userConfig, String[] exerciseList) {
         int[] newSolution = Arrays.copyOf(solution, solution.length);
         Random random = new Random();
-        // Randomly select an exercise to change
-        int exerciseIndex = random.nextInt(userConfig[2] * userConfig[1]); // number of total workouts * exercises per workout
-        // Get a random position of an exercise ID within the chromosome
-        int startIndex = exerciseIndex * 3;
-        // Randomly select a new exercise
-        int newExercise = random.nextInt(exerciseList.length);
-        newSolution[startIndex] = newExercise;
+        double randomNumber = random.nextDouble();
 
+        int exerciseIndex = generateRandomExerciseIndex(userConfig[3]);
+
+        if (exerciseIndex > (userConfig[3] - 9)) {
+            exerciseIndex -= 9;
+        }
+
+        if (randomNumber < (1.0 / 3.0)) {
+            newSolution = changeExercise(newSolution, exerciseList, exerciseIndex);
+            newSolution = changeActiveTime(newSolution, userPlan, userConfig, exerciseIndex + 1);
+            newSolution = changeRestTime(newSolution, userPlan, userConfig, exerciseIndex + 2);
+            // Alter 6 genes
+        } else if (randomNumber < (2.0 / 3.0)) {
+            for (int i = 0; i < 6; i += 3) {
+                newSolution = changeExercise(newSolution, exerciseList, exerciseIndex);
+                newSolution = changeActiveTime(newSolution, userPlan, userConfig, exerciseIndex + i + 1);
+                newSolution = changeRestTime(newSolution, userPlan, userConfig, exerciseIndex + i + 2);
+            }
+            // Alter 9 genes
+        } else {
+            for (int i = 0; i < 9; i += 3) {
+                newSolution = changeExercise(newSolution, exerciseList, exerciseIndex);
+                newSolution = changeActiveTime(newSolution, userPlan, userConfig, exerciseIndex + i + 1);
+                newSolution = changeRestTime(newSolution, userPlan, userConfig, exerciseIndex + i + 2);
+            }
+        }
+        return newSolution;
+    }
+
+    public static int[] changeExercise(int[] solution, String[] exerciseList, int exerciseIndex) {
+        Random random = new Random();
+        int newExercise = random.nextInt(exerciseList.length);
+        solution[exerciseIndex] = newExercise;
+        return solution;
+    }
+
+    public static int[] changeActiveTime(int[] solution, int[][] userPlan, int[] userConfig, int exerciseIndex) {
         // Randomly select the active time within the target range
-        if ((startIndex + 1) < (userConfig[0] * userConfig[1] * 3)) {
+        if (exerciseIndex < (userConfig[0] * userConfig[1] * 3)) {
             int minActiveTime = userPlan[0][0];
             int maxActiveTime = userPlan[0][1];
             Random randomActiveTime = new Random();
-            newSolution[startIndex+1] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
-        } else if ((startIndex + 1) > ((userConfig[0] * userConfig[1] * 3) - 1) && (startIndex + 1) < (userConfig[0] * 2 * userConfig[1] * 3)) {
+            solution[exerciseIndex] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
+        } else if (exerciseIndex > ((userConfig[0] * userConfig[1] * 3) - 1) && (exerciseIndex) < (userConfig[0] * 2 * userConfig[1] * 3)) {
             int minActiveTime = userPlan[1][0];
             int maxActiveTime = userPlan[1][1];
             Random randomActiveTime = new Random();
-            newSolution[startIndex+1] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
-        } else if ((startIndex + 1) > ((userConfig[0] * 2 * userConfig[1] * 3) - 1) && (startIndex + 1) < (userConfig[0] * 3 * userConfig[1] * 3)) {
+            solution[exerciseIndex] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
+        } else if (exerciseIndex > ((userConfig[0] * 2 * userConfig[1] * 3) - 1) && exerciseIndex < (userConfig[0] * 3 * userConfig[1] * 3)) {
             int minActiveTime = userPlan[2][0];
             int maxActiveTime = userPlan[2][1];
             Random randomActiveTime = new Random();
-            newSolution[startIndex+1] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
+            solution[exerciseIndex] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
         } else {
             int minActiveTime = userPlan[3][0];
             int maxActiveTime = userPlan[3][1];
             Random randomActiveTime = new Random();
-            newSolution[startIndex+1] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
+            solution[exerciseIndex] = randomActiveTime.nextInt(maxActiveTime - minActiveTime + 1) + minActiveTime;
         }
+        return solution;
+    }
 
+    public static int[] changeRestTime(int[] solution, int[][] userPlan, int[] userConfig, int exerciseIndex) {
         // Randomly select the rest time within the target range
-        if ((startIndex + 2) < (userConfig[0] * userConfig[1] * 3)) {
+        if (exerciseIndex < (userConfig[0] * userConfig[1] * 3)) {
             int minRestTime = userPlan[0][2];
             int maxRestTime = userPlan[0][3];
             Random randomRestTime = new Random();
-            newSolution[startIndex + 2] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
-        } else if ((startIndex + 2) > ((userConfig[0] * userConfig[1] * 3) - 1) && (startIndex + 2) < (userConfig[0] * 2 * userConfig[1] * 3)) {
+            solution[exerciseIndex] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
+        } else if (exerciseIndex > ((userConfig[0] * userConfig[1] * 3) - 1) && exerciseIndex < (userConfig[0] * 2 * userConfig[1] * 3)) {
             int minRestTime = userPlan[1][2];
             int maxRestTime = userPlan[1][3];
             Random randomRestTime = new Random();
-            newSolution[startIndex + 2] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
-        } else if ((startIndex + 2) > ((userConfig[0] * 2 * userConfig[1] * 3) - 1) && (startIndex + 2) < (userConfig[0] * 3 * userConfig[1] * 3)) {
+            solution[exerciseIndex] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
+        } else if (exerciseIndex > ((userConfig[0] * 2 * userConfig[1] * 3) - 1) && exerciseIndex < (userConfig[0] * 3 * userConfig[1] * 3)) {
             int minRestTime = userPlan[2][2];
             int maxRestTime = userPlan[2][3];
             Random randomRestTime = new Random();
-            newSolution[startIndex + 2] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
+            solution[exerciseIndex] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
         } else {
             int minRestTime = userPlan[3][2];
             int maxRestTime = userPlan[3][3];
             Random randomRestTime = new Random();
-            newSolution[startIndex + 2] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
+            solution[exerciseIndex] = randomRestTime.nextInt(maxRestTime - minRestTime + 1) + minRestTime;
         }
-        return newSolution;
+        return solution;
     }
 
     /**
@@ -452,23 +485,6 @@ public class First_Version_SHC_CardioEndurance {
         if (number == length) {
             return number - 3;
         }
-        return number;
-    }
-    public static int generateRandomActiveTimeIndex (int length) {
-        Random random = new Random();
-        int maxIndex = (length - 1) / 3;
-        int index = random.nextInt(maxIndex + 1);
-        int number = index * 3 + 1;
-
-        return number;
-    }
-
-    public static int generateRandomRestTimeIndex (int length) {
-        Random random = new Random();
-        int maxIndex = (length - 2) / 3;
-        int index = random.nextInt(maxIndex + 1);
-        int number = index * 3 + 2;
-
         return number;
     }
 

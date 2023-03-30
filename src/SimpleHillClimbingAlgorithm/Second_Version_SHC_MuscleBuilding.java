@@ -162,7 +162,7 @@ public class Second_Version_SHC_MuscleBuilding {
         // The algorithm loop
         while(currentIteration < maxGenerations) {
             // Generate a new solution by changing one exercise
-            int[] newSolution = changeOneExercise(bestSolution, intermediatePlan, intermediateConfig, intermediateExercises);
+            int[] newSolution = changeExercise(bestSolution, intermediatePlan, intermediateConfig, intermediateExercises);
             double newFitness = calcFitness(newSolution, intermediatePlan, intermediateConfig);
 
             // If the new solution is better, accept it as the current best solution
@@ -218,7 +218,7 @@ public class Second_Version_SHC_MuscleBuilding {
      * @param solution the solution to change
      * @return the new solution with one exercise changed
      */
-    public static int[] changeOneExercise(int[] solution, int[][] userPlan, int[] userConfig, String[] exerciseList) {
+    public static int[] changeExercise(int[] solution, int[][] userPlan, int[] userConfig, String[] exerciseList) {
         int[] newSolution = Arrays.copyOf(solution, solution.length);
         Random random = new Random();
         double randomNumber = random.nextDouble();
@@ -234,7 +234,6 @@ public class Second_Version_SHC_MuscleBuilding {
             newSolution[exerciseIndex] = newExercise;
         } else if (randomNumber < (2.0 / 3.0)) {
             setsIndex = generateRandomSetsIndex(userConfig[6]);
-
             // Randomly select the number of sets within the target range
             if (setsIndex < (userConfig[0] * userConfig[4] * 3)) {
                 newSolution[setsIndex] = userPlan[0][0];
@@ -247,7 +246,6 @@ public class Second_Version_SHC_MuscleBuilding {
             }
         } else {
             repsIndex = generateRandomRepsIndex(userConfig[6]);
-
             // Randomly select the number of reps within the target range
             if (repsIndex < (userConfig[0] * userConfig[4] * 3)) {
                 int minReps = userPlan[0][1];

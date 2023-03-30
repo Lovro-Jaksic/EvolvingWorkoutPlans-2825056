@@ -46,8 +46,8 @@ public class GeneticAlgorithm {
 
             int totalActiveTime = 0;
             int totalRestTime = 0;
-            int averageActiveTime = 0;
-            int averageRestTime = 0;
+            int averageActiveTime;
+            int averageRestTime;
 
             // For loop to iterate through all the exercises per workout (4, 5, 6)
             for (int exercise = 0; exercise < userConfig[1]; exercise++) {
@@ -217,7 +217,6 @@ public class GeneticAlgorithm {
             }
         }
         individual.setFitness(fitness);
-
         //Used to check how the fitness values look like for individuals
 //        System.out.println(fitness);
         return fitness;
