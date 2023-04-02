@@ -148,42 +148,88 @@ public class Third_Version_SHC_MuscleBuilding {
     static int [] advancedConfig = {5, 5, 6, 6, 6, 22, 396};
 
     // The number of generations used for terminating the algorithm
-    public static int maxGenerations = 250;
+    public static int maxGenerations = 1000000;
+    public static int [] gridSearchGenerations = {1000, 10000, 100000, 500000, 1000000};
 
     public static void main(String[] args) {
+        long totalDurationMillis = 0;
+        long startTime = System.currentTimeMillis();
+        int runCounter = 1;
+        double [] allValues = new double [30];
 
-        // Initialize the current best solution
-        int[] bestSolution = generateRandomSolution(intermediateConfig[6]);
-        double bestFitness = calcFitness(bestSolution, intermediatePlan, intermediateConfig);
+        int bestNumOfGenerations = -1;
+        double bestAverageFitness = Double.NEGATIVE_INFINITY;
 
-        // The current iteration
-        int currentIteration = 0;
+        // Loop through all the configurations
+//        for (int numOfGenerations : gridSearchGenerations) {
+            double totalFitness = 0.0;
 
-        // The algorithm loop
-        while(currentIteration < maxGenerations) {
-            // Generate a new solution by changing one exercise
-            int[] newSolution = changeSetsOfGenes(bestSolution, intermediatePlan, intermediateConfig, intermediateExercises);
-            double newFitness = calcFitness(newSolution, intermediatePlan, intermediateConfig);
+            // Loop 30 times and get the average
+            for (int i = 0; i < 30; i++) {
+                // Initialize the current best solution
+                int[] bestSolution = generateRandomSolution(beginnerConfig[6]);
+                double bestFitness = calcFitness(bestSolution, beginnerPlan, beginnerConfig);
 
-            // If the new solution is better, accept it as the current best solution
-            if (newFitness > bestFitness) {
-                bestSolution = newSolution;
-                bestFitness = newFitness;
+                // The current iteration
+                int currentIteration = 0;
+
+                // The algorithm loop
+                while(currentIteration < maxGenerations) {
+                    // Generate a new solution by changing one exercise
+                    int[] newSolution = changeSetsOfGenes(bestSolution, beginnerPlan, beginnerConfig, beginnerExercises);
+                    double newFitness = calcFitness(newSolution, beginnerPlan, beginnerConfig);
+
+                    // If the new solution is better, accept it as the current best solution
+                    if (newFitness > bestFitness) {
+                        bestSolution = newSolution;
+                        bestFitness = newFitness;
+                    }
+
+                    // Increment the iteration count
+                    currentIteration++;
+                }
+                allValues[i] = bestFitness;
+
+//                System.out.println("Stopped after " + maxGenerations + " generations");
+//                totalFitness += bestFitness;
+//                runCounter++;
+
+                // Print the best solution and its fitness
+//                System.out.println("Best solution: " + Arrays.toString(bestSolution));
+//                System.out.println("Fitness: " + bestFitness);
+
+                // Print the workouts in readable format
+//                solutionToString(bestSolution, intermediateExercises, intermediateConfig);
             }
-
-            // Increment the iteration count
-            currentIteration++;
+//            double averageFitness = totalFitness / 30;
+//            System.out.println("Average fitness after 30 runs: " + averageFitness +
+//                    ", Number of generations: " + numOfGenerations);
+//
+//            if (averageFitness > bestAverageFitness) {
+//                bestAverageFitness = averageFitness;
+//                bestNumOfGenerations = numOfGenerations;
+//            }
+//        }
+//        long endTime = System.currentTimeMillis();
+//        //Calculate the duration
+//        long durationMillis = endTime - startTime;
+//        double durationSeconds = durationMillis / 1000.0;
+//        double durationMinutes = durationSeconds / 60.0;
+//        double durationHours = durationMinutes / 60.0;
+//
+//        // Print the durations
+//        System.out.println("Duration of the run: " + durationMillis + " milliseconds");
+//        System.out.println("Duration of the run: " + durationSeconds + " seconds");
+//        System.out.println("Duration of the run: " + durationMinutes + " minutes");
+//        System.out.println("Duration of the run: " + durationHours + " hours");
+//
+//        System.out.println("Best performing number of generations: " + bestNumOfGenerations
+//                + ", Best average fitness: " + bestAverageFitness);
+        int tracker = 1;
+        for (double fitness : allValues) {
+            System.out.println("Value no." + tracker + " " + fitness);
+            tracker++;
         }
-
-        System.out.println("Stopped after " + maxGenerations + " generations");
-
-        // Print the best solution and its fitness
-        System.out.println("Best solution: " + Arrays.toString(bestSolution));
-        System.out.println("Fitness: " + bestFitness);
-
-        // Print the workouts in readable format
-        solutionToString(bestSolution, intermediateExercises, intermediateConfig);
-
     }
 
     /**
