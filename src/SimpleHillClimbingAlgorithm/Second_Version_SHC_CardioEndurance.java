@@ -111,50 +111,102 @@ public class Second_Version_SHC_CardioEndurance {
     };
 
     // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
-    static int [] beginnerConfig = {3, 4, 12, 144};
-    static int [] intermediateConfig = {4, 5, 16, 240};
-    static int [] advancedConfig = {5, 6, 20, 360};
+    static int[] beginnerConfig = {3, 4, 12, 144};
+    static int[] intermediateConfig = {4, 5, 16, 240};
+    static int[] advancedConfig = {5, 6, 20, 360};
 
     // The number of generations used for terminating the algorithm
-    public static int maxGenerations = 500;
+    public static int maxGenerations = 500000;
+    public static int[] gridSearchGenerations = {1000, 10000, 100000, 500000, 1000000};
 
     public static void main(String[] args) {
+        long totalDurationMillis = 0;
+        long startTime = System.currentTimeMillis();
+        int runCounter = 1;
+        double [] allValues = new double[30];
 
-        // Initialize the current best solution
-        int[] bestSolution = generateRandomSolution(intermediateConfig[3]);
-        double bestFitness = calcFitness(bestSolution, intermediatePlan, intermediateConfig);
+        int bestNumOfGenerations = -1;
+        double bestAverageFitness = Double.NEGATIVE_INFINITY;
 
-        // The current iteration
-        int currentIteration = 0;
+        // Loop through all the configurations
+//        for (int numOfGenerations : gridSearchGenerations) {
+            double totalFitness = 0.0;
+            // Loop 30 times and get the average
+            for (int i = 0; i < 30; i++) {
+                // Initialize the current best solution
+                int[] bestSolution = generateRandomSolution(advancedConfig[3]);
+                double bestFitness = calcFitness(bestSolution, advancedPlan, advancedConfig);
 
-        // The algorithm loop
-        while(currentIteration < maxGenerations) {
-            // Generate a new solution by changing one exercise
-            int[] newSolution = changeExercise(bestSolution, intermediatePlan, intermediateConfig, intermediateHIITExercises);
-            double newFitness = calcFitness(newSolution, intermediatePlan, intermediateConfig);
+                // The current iteration
+                int currentIteration = 0;
 
-            // If the new solution is better, accept it as the current best solution
-            if (newFitness > bestFitness) {
-                bestSolution = newSolution;
-                bestFitness = newFitness;
+                // The algorithm loop
+                while (currentIteration < maxGenerations) {
+                    // Generate a new solution by changing one exercise
+                    int[] newSolution = changeExercise(bestSolution, advancedPlan, advancedConfig, advancedHIITExercises);
+                    double newFitness = calcFitness(newSolution, advancedPlan, advancedConfig);
+
+                    // If the new solution is better, accept it as the current best solution
+                    if (newFitness > bestFitness) {
+                        bestSolution = newSolution;
+                        bestFitness = newFitness;
+                    }
+                    // Increment the iteration count
+                    currentIteration++;
+                }
+                allValues[i] = bestFitness;
+//                System.out.println("Stopped after " + maxGenerations + " generations");
+
+                // Print the best solution and its fitness
+//                System.out.println("Best solution: " + Arrays.toString(bestSolution));
+//                System.out.println("Fitness: " + bestFitness);
+
+                // Print the workouts in readable format
+//                solutionToString(bestSolution, intermediateHIITExercises, intermediateConfig);
+
+                // Print the best solution and its fitness
+//                System.out.println("Best solution: " + Arrays.toString(bestSolution));
+//                totalFitness += bestFitness;
+//                System.out.println("Run number: " + runCounter + ", Fitness: " + bestFitness);
+//                runCounter++;
+                // Print the workouts in readable format
+//                solutionToString(bestSolution, intermediateHIITExercises, intermediateConfig);
             }
+//            double averageFitness = totalFitness / 30;
+//            System.out.println("Average fitness after 30 runs: " + averageFitness +
+//                    ", Number of generations: " + numOfGenerations);
+//
+//            if (averageFitness > bestAverageFitness) {
+//                bestAverageFitness = averageFitness;
+//                bestNumOfGenerations = numOfGenerations;
+//            }
+//        }
+//        long endTime = System.currentTimeMillis();
+//        //Calculate the duration
+//        long durationMillis = endTime - startTime;
+//        double durationSeconds = durationMillis / 1000.0;
+//        double durationMinutes = durationSeconds / 60.0;
+//        double durationHours = durationMinutes / 60.0;
+//
+//        // Print the durations
+//        System.out.println("Duration of the run: " + durationMillis + " milliseconds");
+//        System.out.println("Duration of the run: " + durationSeconds + " seconds");
+//        System.out.println("Duration of the run: " + durationMinutes + " minutes");
+//        System.out.println("Duration of the run: " + durationHours + " hours");
+//
+//        System.out.println("Best performing number of generations: " + bestNumOfGenerations
+//                + ", Best average fitness: " + bestAverageFitness);\
 
-            // Increment the iteration count
-            currentIteration++;
-        }
-
-        System.out.println("Stopped after " + maxGenerations + " generations");
-
-        // Print the best solution and its fitness
-        System.out.println("Best solution: " + Arrays.toString(bestSolution));
-        System.out.println("Fitness: " + bestFitness);
-
-        // Print the workouts in readable format
-        solutionToString(bestSolution, intermediateHIITExercises, intermediateConfig);
+        int tracker = 1;
+            for (double fitness : allValues) {
+                System.out.println("Value no." + tracker + " " + fitness);
+                tracker++;
+            }
     }
 
     /**
      * Generates a random solution
+     *
      * @return a random solution
      */
     public static int[] generateRandomSolution(int chromosomeLength) {
@@ -182,6 +234,7 @@ public class Second_Version_SHC_CardioEndurance {
 
     /**
      * Changes one exercise in the given solution randomly
+     *
      * @param solution the solution to change
      * @return the new solution with one exercise changed
      */
@@ -256,7 +309,7 @@ public class Second_Version_SHC_CardioEndurance {
      * <p>
      * For now this will be based on the frequency of body parts trained in an
      * exercise and the amount of sets and reps trained per exercise
-     *
+     * <p>
      * (sets and reps and later more difficult exercises)
      *
      * @param solution
@@ -291,7 +344,7 @@ public class Second_Version_SHC_CardioEndurance {
                             fitness -= 500;
                         }
                         // If not, add them to the set
-                        if (!selectedExercises.contains(currentGene)){
+                        if (!selectedExercises.contains(currentGene)) {
                             selectedExercises.add(currentGene);
                         }
 
@@ -451,7 +504,7 @@ public class Second_Version_SHC_CardioEndurance {
         return fitness;
     }
 
-    public static int generateRandomExerciseIndex (int length) {
+    public static int generateRandomExerciseIndex(int length) {
         Random random = new Random();
         int maxIndex = length / 3;
         int index = random.nextInt(maxIndex + 1);
@@ -461,7 +514,8 @@ public class Second_Version_SHC_CardioEndurance {
         }
         return number;
     }
-    public static int generateRandomActiveTimeIndex (int length) {
+
+    public static int generateRandomActiveTimeIndex(int length) {
         Random random = new Random();
         int maxIndex = (length - 1) / 3;
         int index = random.nextInt(maxIndex + 1);
@@ -470,7 +524,7 @@ public class Second_Version_SHC_CardioEndurance {
         return number;
     }
 
-    public static int generateRandomRestTimeIndex (int length) {
+    public static int generateRandomRestTimeIndex(int length) {
         Random random = new Random();
         int maxIndex = (length - 2) / 3;
         int index = random.nextInt(maxIndex + 1);

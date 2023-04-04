@@ -139,121 +139,121 @@ public class CardioEnduranceGA {
         hyperParameters.put("elitismCount", new double[]{1, 2, 4, 5, 8});
         hyperParameters.put("selectionSize", new double[]{1, 3, 5, 8, 10});
 
-        long totalDurationMillis = 0;
-        long startTime = System.currentTimeMillis();
-        int runCounter = 1;
+//        long totalDurationMillis = 0;
+//        long startTime = System.currentTimeMillis();
+//        int runCounter = 1;
 
         // Loop through all possible combinations of hyperparameters
-        for (double populationSize : hyperParameters.get("populationSize")) {
-            for (double mutationRate : hyperParameters.get("mutationRate")) {
-                for (double crossoverRate : hyperParameters.get("crossoverRate")) {
-                    for (double elitismCount : hyperParameters.get("elitismCount")) {
-                        for (double selectionSize : hyperParameters.get("selectionSize")) {
-                            double totalFitness = 0.0;
-                            // Call the method for running the genetic algorithm
-                            for (int i = 0; i < 5; i++) {
-                                Map<String, Double> result = runGeneticAlgorithm((int) populationSize, mutationRate, crossoverRate,
-                                        (int) elitismCount, (int) selectionSize);
-
-                                totalFitness += result.get("fitness");
-
-                                System.out.println("Run number: " + runCounter +
-                                        " Population size: " + populationSize +
-                                        ", Mutation rate: " + mutationRate +
-                                        ", Crossover rate: " + crossoverRate +
-                                        ", Elitism count: " + elitismCount +
-                                        ", Selection size: " + selectionSize +
-                                        ", Fitness: " + result.get("fitness"));
-
-                                runCounter++;
-                            }
-                            // Store every average fitness and corresponding config in a Hash Map
-                            double averageFitness = totalFitness / 5;
-                            Map<String, Double> currentConfiguration = new HashMap<>();
-                            currentConfiguration.put("populationSize", populationSize);
-                            currentConfiguration.put("mutationRate", mutationRate);
-                            currentConfiguration.put("crossoverRate", crossoverRate);
-                            currentConfiguration.put("elitismCount", elitismCount);
-                            currentConfiguration.put("selectionSize", selectionSize);
-                            configurationsFitness.put(currentConfiguration, averageFitness);
-
-                            System.out.println("Average of the last 5 runs: " +
-                                    " Population size: " + populationSize +
-                                    ", Mutation rate: " + mutationRate +
-                                    ", Crossover rate: " + crossoverRate +
-                                    ", Elitism count: " + elitismCount +
-                                    ", Selection size: " + selectionSize +
-                                    ", Average Fitness: " + averageFitness);
-                        }
-                    }
-                }
-            }
-        }
-        // Record the end time
-        long endTime = System.currentTimeMillis();
-        // Calculate the duration
-        long durationMillis = endTime - startTime;
-
-        double durationSeconds = durationMillis / 1000.0;
-        double durationMinutes = durationSeconds / 60.0;
-        double durationHours = durationMinutes / 60.0;
-
-        //Print the durations
-        System.out.println("Duration of the run: " + durationMillis + " milliseconds");
-        System.out.println("Duration of the run: " + durationSeconds + " seconds");
-        System.out.println("Duration of the run: " + durationMinutes + " minutes");
-        System.out.println("Duration of the run: " + durationHours + " hours");
-
-        Map<String, Double> bestConfiguration = new HashMap<>();
-        double highestAverageFitness = Double.NEGATIVE_INFINITY;
-        for (Map.Entry<Map<String, Double>, Double> entry : configurationsFitness.entrySet()) {
-            if (entry.getValue() > highestAverageFitness) {
-                highestAverageFitness = entry.getValue();
-                bestConfiguration = entry.getKey();
-            }
-        }
-
-        System.out.println("Best average fitness: " + highestAverageFitness);
-        System.out.println("Best configuration: " + bestConfiguration.toString());
+//        for (double populationSize : hyperParameters.get("populationSize")) {
+//            for (double mutationRate : hyperParameters.get("mutationRate")) {
+//                for (double crossoverRate : hyperParameters.get("crossoverRate")) {
+//                    for (double elitismCount : hyperParameters.get("elitismCount")) {
+//                        for (double selectionSize : hyperParameters.get("selectionSize")) {
+//                            double totalFitness = 0.0;
+//                            // Call the method for running the genetic algorithm
+//                            for (int i = 0; i < 5; i++) {
+//                                Map<String, Double> result = runGeneticAlgorithm((int) populationSize, mutationRate, crossoverRate,
+//                                        (int) elitismCount, (int) selectionSize);
+//
+//                                totalFitness += result.get("fitness");
+//
+//                                System.out.println("Run number: " + runCounter +
+//                                        " Population size: " + populationSize +
+//                                        ", Mutation rate: " + mutationRate +
+//                                        ", Crossover rate: " + crossoverRate +
+//                                        ", Elitism count: " + elitismCount +
+//                                        ", Selection size: " + selectionSize +
+//                                        ", Fitness: " + result.get("fitness"));
+//
+//                                runCounter++;
+//                            }
+//                            // Store every average fitness and corresponding config in a Hash Map
+//                            double averageFitness = totalFitness / 5;
+//                            Map<String, Double> currentConfiguration = new HashMap<>();
+//                            currentConfiguration.put("populationSize", populationSize);
+//                            currentConfiguration.put("mutationRate", mutationRate);
+//                            currentConfiguration.put("crossoverRate", crossoverRate);
+//                            currentConfiguration.put("elitismCount", elitismCount);
+//                            currentConfiguration.put("selectionSize", selectionSize);
+//                            configurationsFitness.put(currentConfiguration, averageFitness);
+//
+//                            System.out.println("Average of the last 5 runs: " +
+//                                    " Population size: " + populationSize +
+//                                    ", Mutation rate: " + mutationRate +
+//                                    ", Crossover rate: " + crossoverRate +
+//                                    ", Elitism count: " + elitismCount +
+//                                    ", Selection size: " + selectionSize +
+//                                    ", Average Fitness: " + averageFitness);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        // Record the end time
+//        long endTime = System.currentTimeMillis();
+//        // Calculate the duration
+//        long durationMillis = endTime - startTime;
+//
+//        double durationSeconds = durationMillis / 1000.0;
+//        double durationMinutes = durationSeconds / 60.0;
+//        double durationHours = durationMinutes / 60.0;
+//
+//        //Print the durations
+//        System.out.println("Duration of the run: " + durationMillis + " milliseconds");
+//        System.out.println("Duration of the run: " + durationSeconds + " seconds");
+//        System.out.println("Duration of the run: " + durationMinutes + " minutes");
+//        System.out.println("Duration of the run: " + durationHours + " hours");
+//
+//        Map<String, Double> bestConfiguration = new HashMap<>();
+//        double highestAverageFitness = Double.NEGATIVE_INFINITY;
+//        for (Map.Entry<Map<String, Double>, Double> entry : configurationsFitness.entrySet()) {
+//            if (entry.getValue() > highestAverageFitness) {
+//                highestAverageFitness = entry.getValue();
+//                bestConfiguration = entry.getKey();
+//            }
+//        }
+//
+//        System.out.println("Best average fitness: " + highestAverageFitness);
+//        System.out.println("Best configuration: " + bestConfiguration.toString());
 
 //        // Print the best result and its corresponding hyperparameters
 //        System.out.println("Best result: " + bestFitness);
 //        System.out.println("Best hyperparameters: " + bestHyperparameters.toString());
 
-//        long totalDurationMillis = 0;
-//
-//        for (int i = 0; i < 30; i++) {
-//            // Record the start time
-//            long startTime = System.currentTimeMillis();
-//
-//            System.out.println("Run number: " + (i + 1));
-//
-//            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[1], hyperParameters.get("mutationRate")[0],
-//                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[1],
-//                    (int) hyperParameters.get("selectionSize")[2]);
-//
-//            // Record the end time
-//            long endTime = System.currentTimeMillis();
-//
-//            // Calculate the duration
-//            long durationMillis = endTime - startTime;
-//
-//            // Calculate the duration and add it to the total duration
-//            totalDurationMillis += durationMillis;
-//
-//            // Convert to seconds, minutes, and hours
-//            double durationSeconds = durationMillis / 1000.0;
-////            double durationMinutes = durationSeconds / 60.0;
-////            double durationHours = durationMinutes / 60.0;
-//
-//            // Print the duration
-////            System.out.println("Duration of the run: " + durationMillis + " milliseconds");
-//            System.out.println("Duration of the run: " + durationSeconds + " seconds");
-////            System.out.println("Duration of the run: " + durationMinutes + " minutes");
-////            System.out.println("Duration of the run: " + durationHours + " hours");
-//        }
-//        System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
-//        System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
+        long totalDurationMillis = 0;
+
+        for (int i = 0; i < 30; i++) {
+            // Record the start time
+            long startTime = System.currentTimeMillis();
+
+            System.out.println("Run number: " + (i + 1));
+
+            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[4], hyperParameters.get("mutationRate")[2],
+                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[2],
+                    (int) hyperParameters.get("selectionSize")[3]);
+
+            // Record the end time
+            long endTime = System.currentTimeMillis();
+
+            // Calculate the duration
+            long durationMillis = endTime - startTime;
+
+            // Calculate the duration and add it to the total duration
+            totalDurationMillis += durationMillis;
+
+            // Convert to seconds, minutes, and hours
+            double durationSeconds = durationMillis / 1000.0;
+            double durationMinutes = durationSeconds / 60.0;
+            double durationHours = durationMinutes / 60.0;
+
+            // Print the duration
+            System.out.println("Duration of the run: " + durationMillis + " milliseconds");
+            System.out.println("Duration of the run: " + durationSeconds + " seconds");
+            System.out.println("Duration of the run: " + durationMinutes + " minutes");
+            System.out.println("Duration of the run: " + durationHours + " hours");
+        }
+        System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
+        System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
     }
 
     public static Map<String,Double> runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
@@ -261,10 +261,10 @@ public class CardioEnduranceGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(beginnerConfig[3]);
+        Population population = geneticAlgorithm.initPopulation(advancedConfig[3]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -286,7 +286,7 @@ public class CardioEnduranceGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
+            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
 
             // Increment the generation count
             generation++;
@@ -309,9 +309,9 @@ public class CardioEnduranceGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-//        solution.solutionToString(advancedHIITExercises, advancedConfig);
+        solution.solutionToString(advancedHIITExercises, advancedConfig);
         // Print the fitness of the individual
-//        System.out.println(solution.getFitness());
+        System.out.println(solution.getFitness());
 
         Map<String, Double> result = new HashMap<>();
         result.put("fitness", population.getFittest(0).getFitness());
