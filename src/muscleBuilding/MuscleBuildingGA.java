@@ -275,15 +275,15 @@ public class MuscleBuildingGA {
 
         long totalDurationMillis = 0;
 
-        for (int i = 0; i < 30; i++) {
+//        for (int i = 0; i < 30; i++) {
             // Record the start time
             long startTime = System.currentTimeMillis();
 
-            System.out.println("Run number: " + (i + 1));
+//            System.out.println("Run number: " + (i + 1));
 
-            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[1], hyperParameters.get("mutationRate")[3],
-                    hyperParameters.get("crossoverRate")[2], (int) hyperParameters.get("elitismCount")[3],
-                    (int) hyperParameters.get("selectionSize")[4]);
+            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[4], hyperParameters.get("mutationRate")[1],
+                    hyperParameters.get("crossoverRate")[3], (int) hyperParameters.get("elitismCount")[2],
+                    (int) hyperParameters.get("selectionSize")[1]);
 
             // Record the end time
             long endTime = System.currentTimeMillis();
@@ -304,7 +304,7 @@ public class MuscleBuildingGA {
             System.out.println("Duration of the run: " + durationSeconds + " seconds");
             System.out.println("Duration of the run: " + durationMinutes + " minutes");
             System.out.println("Duration of the run: " + durationHours + " hours");
-        }
+//        }
         System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
         System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
     }
@@ -314,10 +314,10 @@ public class MuscleBuildingGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(advancedConfig[6]);
+        Population population = geneticAlgorithm.initPopulation(beginnerConfig[6]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
+        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -335,7 +335,7 @@ public class MuscleBuildingGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
+            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
             // Increment the generation count
             generation++;
@@ -347,7 +347,7 @@ public class MuscleBuildingGA {
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString(advancedExercises, advancedConfig);
+        solution.solutionToString(beginnerExercises, beginnerConfig);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 

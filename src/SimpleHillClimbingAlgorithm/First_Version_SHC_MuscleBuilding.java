@@ -109,13 +109,13 @@ public class First_Version_SHC_MuscleBuilding {
     // 1st element represents sets, 2nd and 3rd elements represent target rep ranges
     static int[][] beginnerPlan = {
             // Week 1
-            {2, 8, 10},
+            {2, 6, 8},
             // Week 2
-            {3, 8, 10},
+            {3, 6, 8},
             // Week 3
-            {3, 10, 12},
+            {3, 8, 10},
             // Week 4
-            {3, 12, 14}
+            {3, 8, 10}
     };
 
     static int[][] intermediatePlan = {
@@ -154,8 +154,10 @@ public class First_Version_SHC_MuscleBuilding {
     public static void main(String[] args) {
 
         // Initialize the current best solution
-        int[] bestSolution = generateRandomSolution(intermediateConfig[6]);
-        double bestFitness = calcFitness(bestSolution, intermediatePlan, intermediateConfig);
+        int[] bestSolution = generateRandomSolution(beginnerConfig[6]);
+        System.out.println("Fully random solution");
+        solutionToString(bestSolution,beginnerExercises, beginnerConfig);
+        double bestFitness = calcFitness(bestSolution, beginnerPlan, beginnerConfig);
 
         // The current iteration
         int currentIteration = 0;
@@ -163,8 +165,8 @@ public class First_Version_SHC_MuscleBuilding {
         // The algorithm loop
         while(currentIteration < maxGenerations) {
             // Generate a new solution by changing one exercise
-            int[] newSolution = changeOneExercise(bestSolution, intermediatePlan, intermediateConfig, intermediateExercises);
-            double newFitness = calcFitness(newSolution, intermediatePlan, intermediateConfig);
+            int[] newSolution = changeOneExercise(bestSolution, beginnerPlan, beginnerConfig, beginnerExercises);
+            double newFitness = calcFitness(newSolution, beginnerPlan, beginnerConfig);
 
             // If the new solution is better, accept it as the current best solution
             if (newFitness > bestFitness) {
@@ -183,7 +185,7 @@ public class First_Version_SHC_MuscleBuilding {
         System.out.println("Fitness: " + bestFitness);
 
         // Print the workouts in readable format
-        solutionToString(bestSolution, intermediateExercises, intermediateConfig);
+        solutionToString(bestSolution, beginnerExercises, beginnerConfig);
 
     }
 
@@ -206,8 +208,8 @@ public class First_Version_SHC_MuscleBuilding {
                 randomNumber = random.nextInt(3) + 2;
                 solution[gene] = randomNumber;
             } else {
-                // generate random number between 8 and 14 for index 2, 5, 8, 11, etc.
-                randomNumber = random.nextInt(9) + 6;
+                // generate random number between 6 and 12 for index 2, 5, 8, 11, etc.
+                randomNumber = random.nextInt(7) + 6;
                 solution[gene] = randomNumber;
             }
         }

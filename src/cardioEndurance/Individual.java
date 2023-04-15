@@ -27,7 +27,7 @@ public class Individual {
     /**
      * A constructor that will initialize a random set of exercises for the 4-week programme
      *
-     * In total there will be 144 genes to fit all the required criteria for the beginner plan (12 workouts *
+     * For example, in total there will be 144 genes to fit all the required criteria for the beginner plan (12 workouts *
      * 4 exercises per workout * 3 genes per exercise (exerciseID, active time, rest time))
      *
      * Ranges for randomisation depend on the gene position

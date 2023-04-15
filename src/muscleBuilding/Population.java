@@ -22,8 +22,6 @@ public class Population {
     /**
      * A constructor to create a population of individuals
      * based on the specified population size and length of individual's chromosomes
-     * @param populationSize
-     * @param chromosomeLength
      */
     public Population(int populationSize, int chromosomeLength) {
         this.population = new Individual[populationSize];
@@ -38,6 +36,12 @@ public class Population {
         return this.population;
     }
 
+    /**
+     * Retrieves the fittest individual at the specified position after sorting the population by fitness
+     *
+     * @param position - The position of the fittest individual in the sorted population
+     * @return The fittest individual at the specified position
+     */
     public Individual getFittest(int position) {
         Arrays.sort(this.population, new Comparator<Individual>() {
             @Override
@@ -73,6 +77,9 @@ public class Population {
         return population[position];
     }
 
+    /**
+     * A method used for shuffling the population array
+     */
     public void shuffle() {
         Random random = new Random();
         for (int i = population.length - 1; i > 0; i--) {

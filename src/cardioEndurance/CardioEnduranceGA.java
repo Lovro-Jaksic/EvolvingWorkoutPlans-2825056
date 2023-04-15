@@ -222,15 +222,15 @@ public class CardioEnduranceGA {
 
         long totalDurationMillis = 0;
 
-        for (int i = 0; i < 30; i++) {
+//        for (int i = 0; i < 30; i++) {
             // Record the start time
             long startTime = System.currentTimeMillis();
 
-            System.out.println("Run number: " + (i + 1));
+//            System.out.println("Run number: " + (i + 1));
 
-            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[4], hyperParameters.get("mutationRate")[2],
-                    hyperParameters.get("crossoverRate")[4], (int) hyperParameters.get("elitismCount")[2],
-                    (int) hyperParameters.get("selectionSize")[3]);
+            runGeneticAlgorithm((int) hyperParameters.get("populationSize")[4], hyperParameters.get("mutationRate")[1],
+                    hyperParameters.get("crossoverRate")[3], (int) hyperParameters.get("elitismCount")[2],
+                    (int) hyperParameters.get("selectionSize")[1]);
 
             // Record the end time
             long endTime = System.currentTimeMillis();
@@ -251,7 +251,7 @@ public class CardioEnduranceGA {
             System.out.println("Duration of the run: " + durationSeconds + " seconds");
             System.out.println("Duration of the run: " + durationMinutes + " minutes");
             System.out.println("Duration of the run: " + durationHours + " hours");
-        }
+//        }
         System.out.println("Total duration of the 30 runs in seconds: " + (totalDurationMillis / 1000.0));
         System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
     }
@@ -261,10 +261,10 @@ public class CardioEnduranceGA {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
 
         // Initialize the population with a specified length of the individual's chromosomes
-        Population population = geneticAlgorithm.initPopulation(advancedConfig[3]);
+        Population population = geneticAlgorithm.initPopulation(beginnerConfig[3]);
 
         // Evaluate the population
-        geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
+        geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
         // Used for keeping track of the generations
         int generation = 1;
@@ -276,8 +276,8 @@ public class CardioEnduranceGA {
          */
         while (!geneticAlgorithm.isTerminationConditionMet(generation, maxGenerations)) {
             // Print the fittest individual from the population
-//            System.out.println("Generation: " + generation + " --> Best workout: ");
-//            population.getFittest(0).solutionToString();
+            System.out.println("Generation: " + generation + " --> Best workout: ");
+            population.getFittest(0).solutionToString(beginnerHIITExercises, beginnerConfig);
 
             // Apply crossover
             population = geneticAlgorithm.uniformCrossover(population);
@@ -286,7 +286,7 @@ public class CardioEnduranceGA {
             population = geneticAlgorithm.mutatePopulation(population);
 
             // Evaluate the population
-            geneticAlgorithm.evaluatePopulation(population, advancedPlan, advancedConfig);
+            geneticAlgorithm.evaluatePopulation(population, beginnerPlan, beginnerConfig);
 
             // Increment the generation count
             generation++;
@@ -304,12 +304,12 @@ public class CardioEnduranceGA {
 //        }
 
         // Print the final solution
-//        System.out.println("Stopped after " + maxGenerations + " generations");
-//        System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
+        System.out.println("Stopped after " + maxGenerations + " generations");
+        System.out.println("Generation: " + generation + " --> Best workout: " + population.getFittest(0).toString());
 
         // Testing the new printing of the solution
         Individual solution = population.getFittest(0);
-        solution.solutionToString(advancedHIITExercises, advancedConfig);
+        solution.solutionToString(beginnerHIITExercises, beginnerConfig);
         // Print the fitness of the individual
         System.out.println(solution.getFitness());
 

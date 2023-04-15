@@ -4,6 +4,12 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * This class is responsible for the implementation of the main genetic algorithm operations
+ * such as population initialization, fitness evaluation, selection, crossover, and mutation.
+ *
+ * This class also includes a method to check for termination conditions.
+ */
 public class GeneticAlgorithm {
     private int populationSize;
     private double mutationRate;
@@ -11,6 +17,9 @@ public class GeneticAlgorithm {
     private int elitismCount;
     protected int selectionSize;
 
+    /**
+     * A constructor for this class
+     */
     public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
@@ -19,21 +28,16 @@ public class GeneticAlgorithm {
         this.selectionSize = selectionSize;
     }
 
+    /**
+     * A method used for initialising the population
+     */
     public Population initPopulation(int chromosomeLength) {
         Population population = new Population(this.populationSize, chromosomeLength);
         return population;
     }
 
     /**
-     * Method used for calculating the fitness of the individual
-     * <p>
-     * For now this will be based on the frequency of body parts trained in an
-     * exercise and the amount of sets and reps trained per exercise
-     *
-     * (sets and reps and later more difficult exercises)
-     *
-     * @param individual
-     * @return
+     * A method used for calculating the fitness of the individual
      */
     public double calcFitness(Individual individual, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
@@ -66,7 +70,7 @@ public class GeneticAlgorithm {
                             selectedExercises.add(currentGene);
                         }
 
-                        // Calculate the fitness according to the ranges for exercise times
+                        // Calculate the fitness according to the ranges for active times
                     } else if (gene == 1) {
                         totalActiveTime += currentGene;
 
@@ -224,12 +228,10 @@ public class GeneticAlgorithm {
 
     /**
      * Method to evaluate the fitness of the whole population
-     * <p>
+     *
      * Loop over the individuals in the population and calculate the
      * fitness of each one, after which the algorithm will calculate
      * the fitness of the whole population
-     *
-     * @param population
      */
     public void evaluatePopulation(Population population, int[][] userPlan, int [] userLevel) {
         double populationFitness = 0;
@@ -245,14 +247,8 @@ public class GeneticAlgorithm {
 
     /**
      * Check if the population has reached the termination condition
-     * <p>
-     * If yes, stop the algorithm (this will be based on the set amount of generations)
-     * <p>
-     * TODO: Implement different termination conditions and test their performance
      *
-     * @param generationsCount
-     * @param maxGeneration
-     * @return
+     * If yes, stop the algorithm (this will be based on the set amount of generations)
      */
     public boolean isTerminationConditionMet(int generationsCount, int maxGeneration) {
         return (generationsCount > maxGeneration);
@@ -264,9 +260,6 @@ public class GeneticAlgorithm {
      * <p>
      * Tournament selection works by choosing N random individuals
      * and then choosing the best of them
-     *
-     * @param population
-     * @return
      */
     public Individual tournamentSelection(Population population) {
         // Initialize a tournament population
@@ -294,10 +287,6 @@ public class GeneticAlgorithm {
      *
      * The first individual whose accumulated fitness is greater than
      * or equal to the random value is selected as the parent.
-     * <p>
-     *
-     * @param population
-     * @return
      */
     public Individual rouletteWheelSelection(Population population) {
         // Calculate the total fitness of the population
@@ -323,7 +312,7 @@ public class GeneticAlgorithm {
      * A method used for selecting parents for crossover
      * based on Stochastic Universal Sampling (SUS) selection
      *
-     * In this implementation, we first calculate the sum of the fitness of all individuals in the population.
+     * This method first calculates the sum of the fitness of all individuals in the population.
      * Then, we calculate the average fitness by dividing the fitness sum by the population size.
      * After that, we choose a random number pointer between 0 and the average fitness.
      *
@@ -332,8 +321,6 @@ public class GeneticAlgorithm {
      *
      * When the pointer becomes less than the cumulative fitness,
      * we have found the selected parent, and we return that individual.
-     * @param population
-     * @return
      */
     public Individual stochasticSelection(Population population) {
         int populationSize = population.size();
@@ -372,15 +359,7 @@ public class GeneticAlgorithm {
      * The fittest individuals from the current population are then selected and added to
      * the truncation population one by one.
      *
-     * Finally, the fittest individual in the truncation population is selected and returned as the parent.
-     *
-     * However, if the same selectionSize is used the first parent in the
-     * crossover will always be the same which is not really desirable,
-     * so I don't know how useful this method will be
-     *
-     *
-     * @param population
-     * @return
+     * Finally, the fittest individual in the truncation population is selected and returned as the parent
      */
     public Individual truncationSelection(Population population) {
         int populationSize = population.size();
@@ -425,10 +404,6 @@ public class GeneticAlgorithm {
      * Finally, a parent is selected from the rank population based on rank-based probability and returned
      *
      * The probability of an individual being selected is proportional to their rank-based probability
-     *
-     *
-     * @param population
-     * @return
      */
     public Individual linearRankSelection(Population population) {
         int populationSize = population.size();
@@ -467,11 +442,6 @@ public class GeneticAlgorithm {
      *
      * If the crossover condition is not met, the fittest individual is
      * simply copied over to the new population
-     *
-     * TODO: Implement a heuristic crossover method?
-     *
-     * @param population
-     * @return
      */
     public Population singlePointCrossover(Population population) {
         Population newPopulation = new Population(population.size());
@@ -508,14 +478,8 @@ public class GeneticAlgorithm {
      * Genes before the crossover point will come from parent1
      * and the genes after the crossover point will come from parent2
      *
-     * Better performance than single point crossover using half of both
-     * parents' genes
-     *
      * If the crossover condition is not met, the fittest individual is
      * simply copied over to the new population
-     *
-     * @param population
-     * @return
      */
     public Population randomSinglePointCrossover(Population population) {
         Population newPopulation = new Population(population.size());
@@ -554,9 +518,6 @@ public class GeneticAlgorithm {
      *
      * If the crossover condition is not met, the fittest individual is
      * simply copied over to the new population
-     *
-     * @param population
-     * @return
      */
     public Population randomTwoPointCrossover(Population population) {
         Population newPopulation = new Population(population.size());
@@ -601,12 +562,6 @@ public class GeneticAlgorithm {
      *
      * If the crossover condition is not met, the fittest individual is
      * simply copied over to the new population
-     *
-     * Best performance so far, but for some reason the number of
-     * sets starts rising as the number of workouts rises
-     *
-     * @param population
-     * @return
      */
     public Population uniformCrossover(Population population) {
         Population newPopulation = new Population(population.size());
@@ -641,12 +596,6 @@ public class GeneticAlgorithm {
      *
      * If the crossover condition is not met, the fittest individual is
      * simply copied over to the new population
-     *
-     * Second-worst performance, but surprisingly the sets are in a good
-     * range quite consistently, reps are usually below 10
-     *
-     * @param population
-     * @return
      */
     public Population arithmeticCrossover(Population population) {
         Population newPopulation = new Population(population.size());
@@ -673,12 +622,7 @@ public class GeneticAlgorithm {
     /**
      * A method used for applying mutation to the population
      *
-     * In this case, uniform mutation
-     *
-     * TODO: Implement different mutation methods and test the results
-     *
-     * @param population
-     * @return
+     * In this case, Uniform Mutation
      */
     public Population mutatePopulation(Population population) {
         int positionTracker = 0;

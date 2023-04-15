@@ -121,8 +121,10 @@ public class First_Version_SHC_CardioEndurance {
     public static void main(String[] args) {
 
         // Initialize the current best solution
-        int[] bestSolution = generateRandomSolution(intermediateConfig[3]);
-        double bestFitness = calcFitness(bestSolution, intermediatePlan, intermediateConfig);
+        int[] bestSolution = generateRandomSolution(beginnerConfig[3]);
+        System.out.println("Fully random solution");
+        solutionToString(bestSolution, beginnerHIITExercises, beginnerConfig);
+        double bestFitness = calcFitness(bestSolution, beginnerPlan, beginnerConfig);
 
         // The current iteration
         int currentIteration = 0;
@@ -130,8 +132,8 @@ public class First_Version_SHC_CardioEndurance {
         // The algorithm loop
         while(currentIteration < maxGenerations) {
             // Generate a new solution by changing one exercise
-            int[] newSolution = changeExercise(bestSolution, intermediatePlan, intermediateConfig, intermediateHIITExercises);
-            double newFitness = calcFitness(newSolution, intermediatePlan, intermediateConfig);
+            int[] newSolution = changeExercise(bestSolution, beginnerPlan, beginnerConfig, beginnerHIITExercises);
+            double newFitness = calcFitness(newSolution, beginnerPlan, beginnerConfig);
 
             // If the new solution is better, accept it as the current best solution
             if (newFitness > bestFitness) {
@@ -150,7 +152,7 @@ public class First_Version_SHC_CardioEndurance {
         System.out.println("Fitness: " + bestFitness);
 
         // Print the workouts in readable format
-        solutionToString(bestSolution, intermediateHIITExercises, intermediateConfig);
+        solutionToString(bestSolution, beginnerHIITExercises, beginnerConfig);
     }
 
     /**
