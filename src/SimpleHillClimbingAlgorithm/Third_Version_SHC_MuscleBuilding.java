@@ -3,6 +3,8 @@ package SimpleHillClimbingAlgorithm;
 import java.util.*;
 
 public class Third_Version_SHC_MuscleBuilding {
+
+    // Array to store all the available beginner exercises (currently 25)
     static String [] beginnerExercises = {
             // Chest
             "Push-ups",
@@ -165,7 +167,7 @@ public class Third_Version_SHC_MuscleBuilding {
             double totalFitness = 0.0;
 
             // Loop 30 times and get the average
-            for (int i = 0; i < 30; i++) {
+//            for (int i = 0; i < 30; i++) {
                 // Initialize the current best solution
                 int[] bestSolution = generateRandomSolution(beginnerConfig[6]);
                 double bestFitness = calcFitness(bestSolution, beginnerPlan, beginnerConfig);
@@ -188,7 +190,7 @@ public class Third_Version_SHC_MuscleBuilding {
                     // Increment the iteration count
                     currentIteration++;
                 }
-                allValues[i] = bestFitness;
+//                allValues[i] = bestFitness;
 
 //                System.out.println("Stopped after " + maxGenerations + " generations");
 //                totalFitness += bestFitness;
@@ -199,8 +201,8 @@ public class Third_Version_SHC_MuscleBuilding {
 //                System.out.println("Fitness: " + bestFitness);
 
                 // Print the workouts in readable format
-//                solutionToString(bestSolution, intermediateExercises, intermediateConfig);
-            }
+                solutionToString(bestSolution, beginnerExercises, beginnerConfig);
+//            }
 //            double averageFitness = totalFitness / 30;
 //            System.out.println("Average fitness after 30 runs: " + averageFitness +
 //                    ", Number of generations: " + numOfGenerations);
@@ -225,15 +227,16 @@ public class Third_Version_SHC_MuscleBuilding {
 //
 //        System.out.println("Best performing number of generations: " + bestNumOfGenerations
 //                + ", Best average fitness: " + bestAverageFitness);
-        int tracker = 1;
-        for (double fitness : allValues) {
-            System.out.println("Value no." + tracker + " " + fitness);
-            tracker++;
-        }
+//        int tracker = 1;
+//        for (double fitness : allValues) {
+//            System.out.println("Value no." + tracker + " " + fitness);
+//            tracker++;
+//        }
     }
 
     /**
      * Generates a random solution at the beginning
+     *
      * @return a random solution
      */
     public static int[] generateRandomSolution(int chromosomeLength) {
@@ -261,6 +264,7 @@ public class Third_Version_SHC_MuscleBuilding {
 
     /**
      * Changes one exercise in the given solution randomly
+     *
      * @param solution the solution to change
      * @return the new solution with one exercise changed
      */
@@ -298,6 +302,9 @@ public class Third_Version_SHC_MuscleBuilding {
         return newSolution;
     }
 
+    /**
+     * A method to change the exerciseID
+     */
     public static int[] changeExercise(int[] solution, String[] exerciseList, int exerciseIndex) {
         Random random = new Random();
         int newExercise = random.nextInt(exerciseList.length);
@@ -305,6 +312,9 @@ public class Third_Version_SHC_MuscleBuilding {
         return solution;
     }
 
+    /**
+     * A method to change the number of sets
+     */
     public static int[] changeSets(int[] solution, int[][] userPlan, int[] userConfig, int setsIndex) {
         // Randomly select the number of sets within the target range
         if (setsIndex < (userConfig[0] * userConfig[4] * 3)) {
@@ -320,6 +330,9 @@ public class Third_Version_SHC_MuscleBuilding {
         return solution;
     }
 
+    /**
+     * A method to change the number of reps
+     */
     public static int[] changeReps(int[] solution, int[][] userPlan, int[] userConfig, int repsIndex) {
         // Randomly select the number of reps within the target range
         if (repsIndex < (userConfig[0] * userConfig[4] * 3)) {
@@ -349,16 +362,6 @@ public class Third_Version_SHC_MuscleBuilding {
 
     /**
      * Method used for calculating the fitness of the solution
-     * <p>
-     * For now this will be based on the frequency of body parts trained in an
-     * exercise and the amount of sets and reps trained per exercise
-     *
-     * (sets and reps and later more difficult exercises)
-     *
-     * @param solution
-     * @param userConfig
-     * @param userPlan
-     * @return fitness
      */
     public static double calcFitness(int[] solution, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
@@ -562,6 +565,9 @@ public class Third_Version_SHC_MuscleBuilding {
         return fitness;
     }
 
+    /**
+     * Method to generate a random exercise index
+     */
     public static int generateRandomExerciseIndex (int length) {
         Random random = new Random();
         int maxIndex = length / 3;

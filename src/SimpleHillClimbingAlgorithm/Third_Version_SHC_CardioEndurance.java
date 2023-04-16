@@ -110,7 +110,10 @@ public class Third_Version_SHC_CardioEndurance {
             {55, 60, 10, 15}
     };
 
-    // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
+    /**
+     * Workouts per week - number of exercises per workout -
+     * total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
+     */
     static int[] beginnerConfig = {3, 4, 12, 144};
     static int[] intermediateConfig = {4, 5, 16, 240};
     static int[] advancedConfig = {5, 6, 20, 360};
@@ -132,7 +135,7 @@ public class Third_Version_SHC_CardioEndurance {
 //        for (int numOfGenerations : gridSearchGenerations) {
             double totalFitness = 0.0;
             // Loop 30 times and get the average
-            for (int i = 0; i < 30; i++) {
+//            for (int i = 0; i < 30; i++) {
                 // Initialize the current best solution
                 int[] bestSolution = generateRandomSolution(advancedConfig[3]);
                 double bestFitness = calcFitness(bestSolution, advancedPlan, advancedConfig);
@@ -154,7 +157,8 @@ public class Third_Version_SHC_CardioEndurance {
                     // Increment the iteration count
                     currentIteration++;
                 }
-                allValues[i] = bestFitness;
+//                allValues[i] = bestFitness;
+
 //                System.out.println("Stopped after " + maxGenerations + " generations");
 
                 // Print the best solution and its fitness
@@ -162,14 +166,14 @@ public class Third_Version_SHC_CardioEndurance {
 //                System.out.println("Fitness: " + bestFitness);
 
                 // Print the workouts in readable format
-//                solutionToString(bestSolution, intermediateHIITExercises, intermediateConfig);
+                solutionToString(bestSolution, advancedHIITExercises, advancedConfig);
 
                 // Print the best solution and its fitness
 //                System.out.println("Best solution: " + Arrays.toString(bestSolution));
 //                totalFitness += bestFitness;
 //                System.out.println("Run number: " + runCounter + ", Fitness: " + bestFitness);
 //                runCounter++;
-            }
+//            }
 //            double averageFitness = totalFitness / 30;
 //            System.out.println("Average fitness after 30 runs: " + averageFitness +
 //                    ", Number of generations: " + numOfGenerations);
@@ -195,11 +199,11 @@ public class Third_Version_SHC_CardioEndurance {
 //        System.out.println("Best performing number of generations: " + bestNumOfGenerations
 //                + ", Best average fitness: " + bestAverageFitness);
 
-        int tracker = 1;
-        for (double fitness : allValues) {
-            System.out.println("Value no." + tracker + " " + fitness);
-            tracker++;
-        }
+//        int tracker = 1;
+//        for (double fitness : allValues) {
+//            System.out.println("Value no." + tracker + " " + fitness);
+//            tracker++;
+//        }
     }
 
     /**
@@ -269,6 +273,9 @@ public class Third_Version_SHC_CardioEndurance {
         return newSolution;
     }
 
+    /**
+     * A method to change the exerciseID
+     */
     public static int[] changeExercise(int[] solution, String[] exerciseList, int exerciseIndex) {
         Random random = new Random();
         int newExercise = random.nextInt(exerciseList.length);
@@ -276,6 +283,9 @@ public class Third_Version_SHC_CardioEndurance {
         return solution;
     }
 
+    /**
+     * A method to change the active time
+     */
     public static int[] changeActiveTime(int[] solution, int[][] userPlan, int[] userConfig, int exerciseIndex) {
         // Randomly select the active time within the target range
         if (exerciseIndex < (userConfig[0] * userConfig[1] * 3)) {
@@ -302,6 +312,9 @@ public class Third_Version_SHC_CardioEndurance {
         return solution;
     }
 
+    /**
+     * A method to change the rest time
+     */
     public static int[] changeRestTime(int[] solution, int[][] userPlan, int[] userConfig, int exerciseIndex) {
         // Randomly select the rest time within the target range
         if (exerciseIndex < (userConfig[0] * userConfig[1] * 3)) {
@@ -330,16 +343,6 @@ public class Third_Version_SHC_CardioEndurance {
 
     /**
      * Method used for calculating the fitness of the solution
-     * <p>
-     * For now this will be based on the frequency of body parts trained in an
-     * exercise and the amount of sets and reps trained per exercise
-     * <p>
-     * (sets and reps and later more difficult exercises)
-     *
-     * @param solution
-     * @param userConfig
-     * @param userPlan
-     * @return fitness
      */
     public static double calcFitness(int[] solution, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
@@ -528,6 +531,9 @@ public class Third_Version_SHC_CardioEndurance {
         return fitness;
     }
 
+    /**
+     * Method to generate a random exercise index
+     */
     public static int generateRandomExerciseIndex(int length) {
         Random random = new Random();
         int maxIndex = length / 3;

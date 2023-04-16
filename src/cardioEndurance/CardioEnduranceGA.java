@@ -114,7 +114,10 @@ public class CardioEnduranceGA {
             {55, 60, 10, 15}
     };
 
-    // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
+    /**
+     * Workouts per week - number of exercises per workout -
+     * total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
+     */
     static int[] beginnerConfig = {3, 4, 12, 144};
     static int[] intermediateConfig = {4, 5, 16, 240};
     static int[] advancedConfig = {5, 6, 20, 360};
@@ -256,6 +259,19 @@ public class CardioEnduranceGA {
         System.out.println("Total duration of the 30 runs in minutes: " + ((totalDurationMillis / 1000.0) / 60.0));
     }
 
+    /**
+     * This method runs the Genetic Algorithm to find the optimal workout plan
+     *
+     * It initialises the population with the given parameters and goes through the evolution process
+     * for a specified number of generations.
+     *
+     * @param populationSize The size of the population
+     * @param mutationRate The mutation rate for the genetic algorithm
+     * @param crossoverRate The crossover rate for the genetic algorithm
+     * @param elitismCount The number of elite individuals to be retained in each generation
+     * @param selectionSize The number of individuals selected for the tournament
+     * @return A Map containing the best individual's fitness and the parameters used for the Genetic Algorithm
+     */
     public static Map<String,Double> runGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int selectionSize) {
         // Create a genetic algorithm object
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(populationSize, mutationRate, crossoverRate, elitismCount, selectionSize);
@@ -276,8 +292,8 @@ public class CardioEnduranceGA {
          */
         while (!geneticAlgorithm.isTerminationConditionMet(generation, maxGenerations)) {
             // Print the fittest individual from the population
-            System.out.println("Generation: " + generation + " --> Best workout: ");
-            population.getFittest(0).solutionToString(beginnerHIITExercises, beginnerConfig);
+//            System.out.println("Generation: " + generation + " --> Best workout: ");
+//            population.getFittest(0).solutionToString(beginnerHIITExercises, beginnerConfig);
 
             // Apply crossover
             population = geneticAlgorithm.uniformCrossover(population);

@@ -270,16 +270,6 @@ public class First_Version_SHC_MuscleBuilding {
 
     /**
      * Method used for calculating the fitness of the solution
-     * <p>
-     * For now this will be based on the frequency of body parts trained in an
-     * exercise and the amount of sets and reps trained per exercise
-     *
-     * (sets and reps and later more difficult exercises)
-     *
-     * @param solution
-     * @param userConfig
-     * @param userPlan
-     * @return fitness
      */
     public static double calcFitness(int[] solution, int[][] userPlan, int[] userConfig) {
         int fitness = 0;

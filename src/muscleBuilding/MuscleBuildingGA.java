@@ -223,7 +223,7 @@ public class MuscleBuildingGA {
 //                            currentConfiguration.put("selectionSize", selectionSize);
 //                            configurationsFitness.put(currentConfiguration, averageFitness);
 //
-//                            System.out.println("Average of the last 15 runs: " +
+//                            System.out.println("Average of the last 5 runs: " +
 //                                    " Population size: " + populationSize +
 //                                    ", Mutation rate: " + mutationRate +
 //                                    ", Crossover rate: " + crossoverRate +
@@ -239,6 +239,7 @@ public class MuscleBuildingGA {
 //        long endTime = System.currentTimeMillis();
         // Calculate the duration
 //        long durationMillis = endTime - startTime;
+//
 //        double durationSeconds = durationMillis / 1000.0;
 //        double durationMinutes = durationSeconds / 60.0;
 //        double durationHours = durationMinutes / 60.0;
@@ -249,7 +250,7 @@ public class MuscleBuildingGA {
 //        System.out.println("Duration of the run: " + durationMinutes + " minutes");
 //        System.out.println("Duration of the run: " + durationHours + " hours");
 
-        // Print the best parameters
+        // Print the best parameters (used before implementing the hyperparameter grid search)
 //        System.out.println("Best Hyperparameters:");
 //        for (Map.Entry<String, Double> entry : bestHyperparameters.entrySet()) {
 //            System.out.println(entry.getKey() + ": " + entry.getValue());
@@ -328,6 +329,10 @@ public class MuscleBuildingGA {
          * Terminates after it reaches the maximum number of generations
          */
         while (!geneticAlgorithm.isTerminationConditionMet(generation, maxGenerations)) {
+            // Print the fittest individual from the population
+//            System.out.println("Generation: " + generation + " --> Best workout: ");
+//            population.getFittest(0).solutionToString(beginnerExercises, beginnerConfig);
+
             // Apply crossover
             population = geneticAlgorithm.uniformCrossover(population);
 
@@ -340,6 +345,16 @@ public class MuscleBuildingGA {
             // Increment the generation count
             generation++;
         }
+
+//         Check if the current result is better than the previous best result
+//        double currentFitness = population.getFittest(0).getFitness();
+//        if (currentFitness > bestFitness) {
+//            bestFitness = currentFitness;
+//            bestHyperparameters.put("populationSize", (double) populationSize);
+//            bestHyperparameters.put("mutationRate", mutationRate);
+//            bestHyperparameters.put("crossoverRate", crossoverRate);
+//            bestHyperparameters.put("elitismCount", (double) elitismCount);
+//            bestHyperparameters.put("selectionSize", (double) selectionSize);
 
         // Print the final solution
         System.out.println("Stopped after " + maxGenerations + " generations");

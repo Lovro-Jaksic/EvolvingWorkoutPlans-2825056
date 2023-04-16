@@ -110,7 +110,10 @@ public class First_Version_SHC_CardioEndurance {
             {55, 60, 10, 15}
     };
 
-    // Workouts per week - number of exercises per workout - total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
+    /**
+     * Workouts per week - number of exercises per workout -
+     * total number of workouts over 4 weeks for all 3 levels - total genes in the chromosome
+     */
     static int [] beginnerConfig = {3, 4, 12, 144};
     static int [] intermediateConfig = {4, 5, 16, 240};
     static int [] advancedConfig = {5, 6, 20, 360};
@@ -248,16 +251,6 @@ public class First_Version_SHC_CardioEndurance {
 
     /**
      * Method used for calculating the fitness of the solution
-     * <p>
-     * For now this will be based on the frequency of body parts trained in an
-     * exercise and the amount of sets and reps trained per exercise
-     *
-     * (sets and reps and later more difficult exercises)
-     *
-     * @param solution
-     * @param userConfig
-     * @param userPlan
-     * @return fitness
      */
     public static double calcFitness(int[] solution, int[][] userPlan, int[] userConfig) {
         int fitness = 0;
@@ -446,7 +439,7 @@ public class First_Version_SHC_CardioEndurance {
         return fitness;
     }
 
-    public static int generateRandomExerciseIndex (int length) {
+    public static int generateRandomExerciseIndex(int length) {
         Random random = new Random();
         int maxIndex = length / 3;
         int index = random.nextInt(maxIndex + 1);
@@ -456,7 +449,7 @@ public class First_Version_SHC_CardioEndurance {
         }
         return number;
     }
-    public static int generateRandomActiveTimeIndex (int length) {
+    public static int generateRandomActiveTimeIndex(int length) {
         Random random = new Random();
         int maxIndex = (length - 1) / 3;
         int index = random.nextInt(maxIndex + 1);
@@ -465,7 +458,7 @@ public class First_Version_SHC_CardioEndurance {
         return number;
     }
 
-    public static int generateRandomRestTimeIndex (int length) {
+    public static int generateRandomRestTimeIndex(int length) {
         Random random = new Random();
         int maxIndex = (length - 2) / 3;
         int index = random.nextInt(maxIndex + 1);
